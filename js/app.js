@@ -1,4 +1,4 @@
-/*global angular, angularDragula*/
+/*global angular, queryString, angularDragula*/
 
 // TODO: Work on security
 // TODO: UX: When user drops task on drop zone, give some kind of feedback that he was successful
@@ -9,9 +9,10 @@
 
   var app = angular.module('prioli', [angularDragula(angular), 'prioli.service.wunderlist']),
     constants = {
-      attr_data_target: "data-target-possible",
+      attr_data_target: "data-drop-zone",
       class_drag_source: "drag-source",
-      class_no_drop: "container-no-drop"
+      class_no_drop: "no-drop",
+      class_sortable: "sortable"
     };
 
   // Note: No browser support for IE < 10
@@ -47,11 +48,22 @@
   });
 
 
-
+  function enableDebugging() {
+    var parsedUrl = queryString.parse(location.search);
+    if (parsedUrl.debug) {
+      console.info("Prioli: Debug mode enabled.");
+      addClass(document.body, "debug-mode");
+      return true;
+    }
+  }
 
   app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', function ($scope, dragulaService, wunderlistService) {
     var tempElement,
       tempElementsArray;
+
+    if (enableDebugging()) {
+      $scope.debug = true;
+    };
 
     $scope.login = wunderlistService.login;
 
@@ -65,9 +77,10 @@
     $scope.status = wunderlistService.status;
     $scope.date = wunderlistService.date;
 
-    function isDropAllowed(el, target, source) { // el, target, source, sibling
+    function isDropAllowed(el, target, source, sibling) { // el, target, source, sibling
+      console.log(sibling);
       if (
-        target === source || // Don't change order when element into same/source zone
+        (!hasClass(source, constants.class_sortable) && target === source) || // Don't change order when element is above source zone (exception: the zone is sortable)
         hasClass(target, constants.class_no_drop) // Disallow drop on certain containers
       ) {
         return false;
@@ -81,16 +94,13 @@
     });
 
     $scope.$on('draggable-tasks.drop', function (e, el, target, source) {
-      console.log("ID: ", el[0].attributes['data-task-id'].value, "Element: ", el, "target: ", target, "source: ", source);
-
       var newDueDate = target[0].attributes['data-list-date'],
         id = el[0].attributes['data-task-id'].value,
         data;
 
       if (newDueDate !== undefined && newDueDate.value !== '' && // Require date in target container
         id !== undefined && id.value !== '') {
-        console.log(newDueDate.value);
-
+        
         data = {
           due_date: newDueDate.value
         };
@@ -100,7 +110,8 @@
     });
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
-      tempElement = findAncestor(source[0], "parent");
+      // Add an indicator to each container which can be used to style relevant drop zones
+      tempElement = findAncestor(source[0], "drag-container");
       addClass(tempElement, constants.class_drag_source);
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
@@ -119,6 +130,7 @@
     });
 
     $scope.$on('draggable-tasks.dragend', function (el) {
+      // Removed indicators we added earlier
       var i = 0,
         l = tempElementsArray.length - 1;
 

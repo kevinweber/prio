@@ -53,10 +53,10 @@
   position: absolute;
   top: 22px;
   right: 12px;
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -ms-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
 }
 
 .custom-menu-toggle .bar:first-child {
@@ -81,10 +81,10 @@
 }
 
 .custom-menu-screen {
-  -webkit-transition: all 0.5s;
-  -moz-transition: all 0.5s;
-  -ms-transition: all 0.5s;
-  transition: all 0.5s;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
   height: 3em;
   position: absolute;
   top: 0;
@@ -119,10 +119,10 @@
     -moz-transform: translateX(0);
     -ms-transform: translateX(0);
     transform: translateX(0);
-    -webkit-transition: all 0.5s;
-    -moz-transition: all 0.5s;
-    -ms-transition: all 0.5s;
-    transition: all 0.5s;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    -ms-transition: all .3s;
+    transition: all .3s;
   }
   .custom-menu-bottom.custom-menu-tucked .pure-menu-link {
     -webkit-transform: translateX(-140px);
@@ -133,17 +133,17 @@
     opacity: 1\9;
   }
   .pure-menu-horizontal:not(.custom-menu-tucked) {
-    -webkit-transition: background 0.5s;
-    -moz-transition: background 0.5s;
-    -ms-transition: background 0.5s;
-    transition: background 0.5s;
+    -webkit-transition: background .3s;
+    -moz-transition: background .3s;
+    -ms-transition: background .3s;
+    transition: background .3s;
     background-color: rgba(0, 0, 0, 0.5);
   }
   .pure-menu-horizontal.custom-menu-tucked {
-    -webkit-transition: background 0.5s;
-    -moz-transition: background 0.5s;
-    -ms-transition: background 0.5s;
-    transition: background 0.5s;
+    -webkit-transition: background .3s;
+    -moz-transition: background .3s;
+    -ms-transition: background .3s;
+    transition: background .3s;
     background-color: transparent;
     z-index: -1;
     position: absolute;

@@ -1,4 +1,18 @@
-div:not(.drag-source)[data-target-possible] .drop-zone {
+html {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+.drag-container .drop-zone {
   bottom: 0;
   display: block;
   height: 7vm;
@@ -15,24 +29,43 @@ div:not(.drag-source)[data-target-possible] .drop-zone {
   width: 33.33%;
 }
 
-.gu-unselectable div:not(.drag-source)[data-target-possible] .drop-zone {
+.gu-unselectable .drag-container .drop-zone {
   margin-bottom: 0;
   opacity: 1;
   transform: translateX(0);
   transition: margin .2s ease-out, left .2s ease-out, opacity .2s ease-out, background .2s ease-out;
 }
 
-.gu-unselectable div:not(.drag-source)[data-target-possible="0"] .drop-zone {
+.gu-unselectable .drag-container[data-drop-zone="0"] .drop-zone {
   background: red;
   left: 0;
 }
 
-.gu-unselectable div:not(.drag-source)[data-target-possible="1"] .drop-zone {
+.gu-unselectable .drag-container[data-drop-zone="1"] .drop-zone {
   background: blue;
   left: 33.33%;
 }
 
-.gu-unselectable div:not(.drag-source)[data-target-possible="2"] .drop-zone {
+.gu-unselectable .drag-container[data-drop-zone="2"] .drop-zone {
   background: green;
   left: 66.66%;
+}
+
+.debug-status {
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 11px;
+  padding: 7px;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.debug-status-200 {
+  background-color: rgba(0, 128, 0, 0.2);
+}
+
+.debug-status p {
+  margin: 0;
 }
