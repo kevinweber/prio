@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prioli">
+
+  <link rel="shortcut icon" href="./libs/angular-dragula/favicon.ico">
+  <!--
+  <link href='./libs/angular-dragula/dist/dragula.css' rel='stylesheet' />
+  <link href='./libs/angular-dragula/example/example.css' rel='stylesheet' />
+-->
+  <link href='./libs/pure/pure-min.css' rel='stylesheet' />
+  <link href='./css/style.css' rel='stylesheet' />
+  <link href='./css/menu.css' rel='stylesheet' />
+  <title>Prioli</title>
+</head>
+
+<body>
+  <!--[if lt IE 10]>
+<p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="http://browsehappy.com/">Upgrade to a different 
+browser</a>.</p>
+<![endif]-->
+
+<div class="custom-menu-wrapper">
+    <div class="pure-menu custom-menu custom-menu-top">
+        <a href="#" class="pure-menu-heading custom-menu-brand">Prioli</a>
+        <a href="#" class="custom-menu-toggle" id="toggle"><s class="bar"></s><s class="bar"></s></a>
+    </div>
+    <div class="pure-menu pure-menu-horizontal pure-menu-scrollable custom-menu custom-menu-bottom custom-menu-tucked" id="tuckedMenu">
+        <div class="custom-menu-screen"></div>
+        <ul class="pure-menu-list">
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Login/Logout</a></li>
+            <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
+        </ul>
+    </div>
+</div>
+
+
+  <div class='examples' ng-app='prioli'>
+    <div class='parent' ng-controller='AppCtrl'>
+
+      <!--      <li ng-repeat="(key,value) in tasks">test{{value}}</li>-->
+
+      <h3 class="tagline">Prioli Matrix</h3>
+
+      <a href="#" ng-click="login()">Login</a>
+
+      <div class="parent">
+        <div class='wrapper'>
+          <div class='container'>
+            <h3>Status</h3>
+            <div ng-bind='status.message'></div>
+          </div>
+        </div>
+      </div>
+
+      <!--
+     <div dragula='"second-bag"'></div>
+<div dragula='"second-bag"'></div>
+-->
+
+      <div class="parent">
+        <div class='wrapper'>
+          <div class='container' dragula="'draggable-tasks'">
+            <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+          <div class='container' dragula="'draggable-tasks'">
+            <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="parent">
+        <div class='wrapper'>
+          <div class='container container-no-drop' dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
+            <h3>Overdue</h3>
+            <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="parent drag-drop-target-container" data-target-possible="">
+        <div class='wrapper'>
+          <div class='container' dragula="'draggable-tasks'" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
+            <div class="hidden drop-zone">Today</div>
+            <h3>Today</h3>
+            <div ng-repeat="taskId in tasks.taskIdsByDate.today track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="parent drag-drop-target-container" data-target-possible="">
+        <div class='wrapper'>
+          <div class='container' dragula="'draggable-tasks'" data-list-date="{{date.tomorrow | date: 'yyyy-MM-dd'}}">
+            <div class="hidden drop-zone">Tomorrow</div>
+            <h3>Tomorrow</h3>
+            <div ng-repeat="taskId in tasks.taskIdsByDate.tomorrow track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+        </div>
+      </div>
+      <div class="parent drag-drop-target-container" data-target-possible="">
+        <div class='wrapper'>
+          <div class='container' dragula="'draggable-tasks'" data-list-date="{{date.week | date: 'yyyy-MM-dd'}}">
+            <div class="hidden drop-zone">Week</div>
+            <h3>Week</h3>
+            <div ng-repeat="taskId in tasks.taskIdsByDate.week track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.5/es5-shim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.34.2/es6-shim.min.js"></script>
+-->
+
+  <script src="./libs/angular/angular.min.js"></script>
+  <script src='./libs/angular-dragula/dist/angular-dragula.min.js'></script>
+  <script src="./libs/query-string/query-string.js"></script>
+  <script src='./libs/wunderlist.js/dist/wunderlist.sdk.min.js'></script>
+
+  <script src='./js/app.js'></script>
+  <script src='./js/service.wunderlist.js'></script>
+</body>
+
+</html>
