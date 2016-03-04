@@ -252,32 +252,42 @@
         var oldDate = tasksById[id].due_date,
           newDate = data.due_date,
           oldCurrentness,
-          newCurrentness,
+//          newCurrentness,
           relevantTasksByDate,
           index;
 
         if (oldDate === newDate) {
           return;
         }
-        
+
         // Get currentness for "old date" so that we can search in taskIdsByDate
         oldCurrentness = getCurrentness(oldDate);
         relevantTasksByDate = taskIdsByDate[oldCurrentness];
 
-        // Remove outdated entry from taskIdsByDate ...
-        index = relevantTasksByDate.indexOf(parseInt(id, 10));
-        if (index !== -1) {
-          relevantTasksByDate.splice(index, 1);
+        // Remove outdated entry from taskIdsByDate -- only for overdue (otherwise, the site breaks for some reason) 
+        if (oldCurrentness === timeSpan.overdue && taskIdsByDate[oldCurrentness] !== undefined) {
+          index = relevantTasksByDate.indexOf(parseInt(id, 10));
+          if (index > -1) {
+            relevantTasksByDate.splice(index, 1);
+          }
         }
 
-        // ... and insert it into the correct new place  
-        newCurrentness = getCurrentness(newDate);
-        taskIdsByDate[newCurrentness].push(parseInt(id, 10));
-
-        // Replace old date in tasksById with new date
-        tasksById[id].due_date = newDate;
+        //        // ... and insert it into the correct new place  
+        //        newCurrentness = getCurrentness(newDate);
+        //
+        //        console.log(id, taskIdsByDate[newCurrentness]);
+        //        if (taskIdsByDate[newCurrentness] === undefined) {
+        //          taskIdsByDate[newCurrentness] = [];
+        //        }
+        //        console.log(id, taskIdsByDate[newCurrentness]);
+        //        if (taskIdsByDate[newCurrentness].indexOf(parseInt(id, 10)) === -1) {
+        //          taskIdsByDate[newCurrentness].push(parseInt(id, 10));
+        //        }
+        //
+        //        // Replace old date in tasksById with new date
+        //        tasksById[id].due_date = newDate;
       },
-        
+
       updateLocalData = function (id, data) {
         updateLocalDueDates(id, data);
       },

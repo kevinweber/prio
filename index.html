@@ -82,7 +82,7 @@ browser</a>.</p>
         <h2>Overdue</h2>
       </div>
       <div class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
-        <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}"></div>
+        <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="tasks.taskIdsByDate.overdue.length"></div>
       </div>
     </div>
     <div class="pure-g parent drag-container" data-drop-zone="">
