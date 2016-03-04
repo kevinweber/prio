@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  var app = angular.module('prioli.service.wunderlist', []),
+  var app = angular.module('prio.service.wunderlist', []),
     WunderlistSDK = window.wunderlist.sdk,
     wunderlistApiUrl = 'https://a.wunderlist.com/api/v1/',
     oauthConfig = {
@@ -11,7 +11,7 @@
       accessCode: '',
       clientID: '16551d4c73904985c4f0',
       // TODO: Security: Display client secret? Only server-side? Not Github! http://stackoverflow.com/questions/6144826/secure-oauth-in-javascript
-      redirectUrl: 'http://localhost/git/prioli/callback.php',
+      redirectUrl: 'http://localhost/git/prio/callback.php',
       // TODO: Security: Generate this random string randomly actually
       // and check that string server-side
       random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'
@@ -248,6 +248,40 @@
         });
       },
 
+      updateLocalDueDates = function (id, data) {
+        var oldDate = tasksById[id].due_date,
+          newDate = data.due_date,
+          oldCurrentness,
+          newCurrentness,
+          relevantTasksByDate,
+          index;
+
+        if (oldDate === newDate) {
+          return;
+        }
+        
+        // Get currentness for "old date" so that we can search in taskIdsByDate
+        oldCurrentness = getCurrentness(oldDate);
+        relevantTasksByDate = taskIdsByDate[oldCurrentness];
+
+        // Remove outdated entry from taskIdsByDate ...
+        index = relevantTasksByDate.indexOf(parseInt(id, 10));
+        if (index !== -1) {
+          relevantTasksByDate.splice(index, 1);
+        }
+
+        // ... and insert it into the correct new place  
+        newCurrentness = getCurrentness(newDate);
+        taskIdsByDate[newCurrentness].push(parseInt(id, 10));
+
+        // Replace old date in tasksById with new date
+        tasksById[id].due_date = newDate;
+      },
+        
+      updateLocalData = function (id, data) {
+        updateLocalDueDates(id, data);
+      },
+
       updateTask = function (id, data) {
         if (data === undefined || data === '') {
           return;
@@ -257,6 +291,7 @@
         data.revision = data.revision || tasksById[id].revision;
 
         sendPatch(id, data);
+        updateLocalData(id, data);
       };
 
 
