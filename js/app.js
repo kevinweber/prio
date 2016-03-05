@@ -8,6 +8,16 @@
   'use strict';
 
   var app = angular.module('prio', [angularDragula(angular), 'prio.service.wunderlist']),
+    oauthConfig = {
+      accessToken: '',
+      accessCode: '',
+      clientID: '16551d4c73904985c4f0',
+      // TODO: Security: Display client secret? Only server-side? Not Github! http://stackoverflow.com/questions/6144826/secure-oauth-in-javascript
+      redirectUrl: 'http://localhost/git/prio/callback.php',
+      // TODO: Security: Generate this random string randomly actually
+      // and check that string server-side
+      random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'
+    },
     CONSTANTS = {
       ATTR_DATA_TARGET: "data-drop-zone",
       ATTR_DATA_DATE: "data-list-date",
@@ -61,6 +71,9 @@
     }
   }
 
+
+
+
   app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', function ($scope, dragulaService, wunderlistService) {
     var tempElement,
       tempElementsArray;
@@ -69,13 +82,14 @@
       $scope.debug = true;
     }
 
+    wunderlistService.init(oauthConfig);
     $scope.login = wunderlistService.login;
 
     if (!wunderlistService.isLoggedIn()) {
       return;
     }
 
-    wunderlistService.init();
+    wunderlistService.loadData();
 
     $scope.tasks = wunderlistService.tasks;
     $scope.status = wunderlistService.status;

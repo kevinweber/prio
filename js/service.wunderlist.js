@@ -6,16 +6,6 @@
   var app = angular.module('prio.service.wunderlist', []),
     WunderlistSDK = window.wunderlist.sdk,
     wunderlistApiUrl = 'https://a.wunderlist.com/api/v1/',
-    oauthConfig = {
-      accessToken: '',
-      accessCode: '',
-      clientID: '16551d4c73904985c4f0',
-      // TODO: Security: Display client secret? Only server-side? Not Github! http://stackoverflow.com/questions/6144826/secure-oauth-in-javascript
-      redirectUrl: 'http://localhost/git/prio/callback.php',
-      // TODO: Security: Generate this random string randomly actually
-      // and check that string server-side
-      random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'
-    },
     timeSpan = {
       overdue: "overdue", // before today (overdue)
       today: "today",
@@ -40,6 +30,7 @@
 
     var WunderlistAPI,
       wunderlist = this,
+      oauthConfig,
       allLists,
       allListIds = [],
       tasksById = {},
@@ -314,7 +305,10 @@
     wunderlist.updateTask = updateTask;
 
     wunderlist.isLoggedIn = function () {
-
+      if (!oauthConfig) {
+        return;
+      }
+      
       // TODO: Security: Check if the randomly generated string equals parsed STATE
       // https://developer.wunderlist.com/documentation/concepts/authorization
       var parsedUrl = queryString.parse(location.search);
@@ -327,17 +321,20 @@
     };
 
     wunderlist.login = function () {
+      if (!oauthConfig) {
+        return;
+      }
+      
       window.location.href = "https://www.wunderlist.com/oauth/authorize?client_id=" +
         oauthConfig.clientID + "&redirect_uri=" +
         oauthConfig.redirectUrl + "&state=" +
         oauthConfig.random;
     };
 
-    wunderlist.init = function () {
-      if (!wunderlist.isLoggedIn) {
+    wunderlist.loadData = function () {
+      if (!wunderlist.isLoggedIn || !oauthConfig) {
         return;
       }
-
 
       WunderlistAPI = new WunderlistSDK(oauthConfig);
 
@@ -345,7 +342,11 @@
         loadAllLists();
       });
     };
-
+    
+    wunderlist.init = function (config) {
+      oauthConfig = config;
+    };
+    
     return wunderlist;
   });
 }());
