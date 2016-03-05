@@ -30,6 +30,7 @@
 
     var WunderlistAPI,
       wunderlist = this,
+      init,
       oauthConfig,
       allLists,
       allListIds = [],
@@ -243,7 +244,7 @@
         var oldDate = tasksById[id].due_date,
           newDate = data.due_date,
           oldCurrentness,
-//          newCurrentness,
+          //          newCurrentness,
           relevantTasksByDate,
           index;
 
@@ -305,10 +306,6 @@
     wunderlist.updateTask = updateTask;
 
     wunderlist.isLoggedIn = function () {
-      if (!oauthConfig) {
-        return;
-      }
-      
       // TODO: Security: Check if the randomly generated string equals parsed STATE
       // https://developer.wunderlist.com/documentation/concepts/authorization
       var parsedUrl = queryString.parse(location.search);
@@ -321,10 +318,6 @@
     };
 
     wunderlist.login = function () {
-      if (!oauthConfig) {
-        return;
-      }
-      
       window.location.href = "https://www.wunderlist.com/oauth/authorize?client_id=" +
         oauthConfig.clientID + "&redirect_uri=" +
         oauthConfig.redirectUrl + "&state=" +
@@ -332,7 +325,7 @@
     };
 
     wunderlist.loadData = function () {
-      if (!wunderlist.isLoggedIn || !oauthConfig) {
+      if (!wunderlist.isLoggedIn) {
         return;
       }
 
@@ -342,11 +335,15 @@
         loadAllLists();
       });
     };
-    
-    wunderlist.init = function (config) {
+
+    init = function (config) {
       oauthConfig = config;
+
+      return wunderlist;
     };
-    
-    return wunderlist;
+
+    return {
+      init: init
+    };
   });
 }());

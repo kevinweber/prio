@@ -27,24 +27,25 @@
   app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', 'helperFactory', '$localstorage', function ($scope, dragulaService, wunderlistService, CONSTANTS, helperFactory, $localstorage) {
     var help = helperFactory,
       tempElement,
-      tempElementsArray;
+      tempElementsArray,
+      listService;
 
     if (help.enableDebugging()) {
       $scope.debug = true;
     }
 
-    wunderlistService.init(oauthConfig);
-    $scope.login = wunderlistService.login;
+    listService = wunderlistService.init(oauthConfig);
 
-    if (!wunderlistService.isLoggedIn()) {
+    $scope.login = listService.login;
+    if (!listService.isLoggedIn()) {
       return;
     }
 
-    wunderlistService.loadData();
+    listService.loadData();
 
-    $scope.tasks = wunderlistService.tasks;
-    $scope.status = wunderlistService.status;
-    $scope.date = wunderlistService.date;
+    $scope.tasks = listService.tasks;
+    $scope.status = listService.status;
+    $scope.date = listService.date;
 
     /**
      * Dragula specific code
@@ -77,7 +78,7 @@
           due_date: newDueDate.value
         };
 
-        wunderlistService.updateTask(id, data);
+        listService.updateTask(id, data);
       }
     });
 
