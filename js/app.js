@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var app = angular.module('prio', [angularDragula(angular), 'prio.service.wunderlist']),
+  var app = angular.module('prio', ['prio.values', 'prio.factory.helpers', 'prio.service.wunderlist', angularDragula(angular)]),
     oauthConfig = {
       accessToken: '',
       accessCode: '',
@@ -17,68 +17,19 @@
       // TODO: Security: Generate this random string randomly actually
       // and check that string server-side
       random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'
-    },
-    CONSTANTS = {
-      ATTR_DATA_TARGET: "data-drop-zone",
-      ATTR_DATA_DATE: "data-list-date",
-      ATTR_TASK_ID: "data-task-id",
-      CLASS_DRAG_SOURCE: "drag-source",
-      CLASS_DRAG_CONTAINER: "drag-container",
-      CLASS_NO_DROP: "no-drop",
-      CLASS_SORTABLE: "sortable",
-      CLASS_OVERDUE: "tasks-overdue"
     };
-
-  // Note: No browser support for IE < 10
-  function hasClass(element, className) {
-    return element.classList.contains(className);
-  }
-
-  // Note: No browser support for IE < 10
-  function addClass(element, className) {
-    if (!hasClass(element, className)) {
-      element.classList.add(className);
-    }
-  }
-
-  // Note: No browser support for IE < 10
-  function removeClass(element, className) {
-    if (hasClass(element, className)) {
-      element.classList.remove(className);
-    }
-  }
-
-  function findAncestor(element, className) {
-    element = element.parentElement;
-    if (element !== undefined && !hasClass(element, className)) {
-      element = findAncestor(element, className);
-    }
-    return element;
-  }
 
   document.getElementById('toggle').addEventListener('click', function (e) {
     document.getElementById('tuckedMenu').classList.toggle('custom-menu-tucked');
     document.getElementById('toggle').classList.toggle('x');
   });
 
-
-  function enableDebugging() {
-    var parsedUrl = queryString.parse(location.search);
-    if (parsedUrl.debug) {
-      console.info("Prio: Debug mode enabled.");
-      addClass(document.body, "debug-mode");
-      return true;
-    }
-  }
-
-
-
-
-  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', function ($scope, dragulaService, wunderlistService) {
-    var tempElement,
+  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', 'helperFactory', function ($scope, dragulaService, wunderlistService, CONSTANTS, helperFactory) {
+    var help = helperFactory,
+      tempElement,
       tempElementsArray;
 
-    if (enableDebugging()) {
+    if (help.enableDebugging()) {
       $scope.debug = true;
     }
 
@@ -95,10 +46,14 @@
     $scope.status = wunderlistService.status;
     $scope.date = wunderlistService.date;
 
+    /**
+     * Dragula specific code
+     */
+
     function isDropAllowed(el, target, source, sibling) { // el, target, source, sibling
       if (
-        (!hasClass(source, CONSTANTS.CLASS_SORTABLE) && target === source) || // Don't change order when element is above source zone (exception: the zone is sortable)
-        hasClass(target, CONSTANTS.CLASS_NO_DROP) // Disallow drop on certain containers
+        (!help.hasClass(source, CONSTANTS.CLASS_SORTABLE) && target === source) || // Don't change order when element is above source zone (exception: the zone is sortable)
+        help.hasClass(target, CONSTANTS.CLASS_NO_DROP) // Disallow drop on certain containers
       ) {
         return false;
       }
@@ -128,8 +83,8 @@
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
       // Add an indicator to each container which can be used to style relevant drop zones
-      tempElement = findAncestor(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
-      addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      tempElement = help.findAncestor(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
+      help.addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
         CONSTANTS.ATTR_DATA_TARGET + "]");
@@ -151,7 +106,7 @@
       var i = 0,
         l = tempElementsArray.length - 1;
 
-      removeClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      help.removeClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
       while (i <= l) {
         tempElementsArray[i].setAttribute(CONSTANTS.ATTR_DATA_TARGET, "");
         i += 1;
