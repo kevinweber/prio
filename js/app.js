@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var app = angular.module('prio', ['prio.values', 'prio.factory.helpers', 'prio.service.wunderlist', angularDragula(angular)]),
+  var app = angular.module('prio', ['prio.values', 'prio.factory.helpers', 'prio.factory.storage', 'prio.service.wunderlist', angularDragula(angular)]),
     oauthConfig = {
       accessToken: '',
       accessCode: '',
@@ -24,7 +24,7 @@
     document.getElementById('toggle').classList.toggle('x');
   });
 
-  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', 'helperFactory', function ($scope, dragulaService, wunderlistService, CONSTANTS, helperFactory) {
+  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', 'helperFactory', '$localstorage', function ($scope, dragulaService, wunderlistService, CONSTANTS, helperFactory, $localstorage) {
     var help = helperFactory,
       tempElement,
       tempElementsArray;
