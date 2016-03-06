@@ -52,7 +52,7 @@
 
       handleError = function (resp, code) {
         var errorMessage;
-        if (resp.error !== undefined && resp.error.message !== undefined) {
+        if (resp.error && resp.error.message) {
           errorMessage = resp.error.message;
         } else {
           errorMessage = resp;
@@ -117,8 +117,8 @@
       storeTasksById = function (task) {
         var id = task.id;
 
-        if (id !== undefined && id !== "") {
-          if (tasksById[id] === undefined) {
+        if (id) {
+          if (!tasksById[id]) {
             tasksById[id] = task;
           }
         }
@@ -129,10 +129,10 @@
           due_date = task.due_date,
           currentness;
 
-        if (due_date !== undefined && due_date !== "") {
+        if (due_date) {
           currentness = getCurrentness(due_date);
 
-          if (taskIdsByDate[currentness] === undefined) {
+          if (!taskIdsByDate[currentness]) {
             // Create new array for every type of "currentness"
             taskIdsByDate[currentness] = [];
           }
@@ -225,7 +225,7 @@
           updateStatus(response.statusText, response.status);
         }, function errorCallback(response) {
           if (tryouts !== 0 && response.status === 409) { // 'Conflict'
-            if (tryouts === undefined) {
+            if (!tryouts) {
               tryouts = 2;
             }
 
@@ -241,7 +241,7 @@
       },
 
       updateTask = function (id, data) {
-        if (data === undefined || data === '') {
+        if (!data) {
           return;
         }
 
@@ -268,7 +268,7 @@
       // TODO: Security: Instead of passing access_token via URL, use SESSIONS
       // http://stackoverflow.com/a/2447269/3266345
 
-      return oauthConfig.accessToken !== undefined ? true : false;
+      return oauthConfig.accessToken ? true : false;
     };
 
     wunderlist.login = function () {
