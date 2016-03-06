@@ -25,14 +25,13 @@
     document.getElementById('toggle').classList.toggle('x');
   });
 
-  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', 'helperFactory', '$localstorage', function ($scope, dragulaService, wunderlistService, CONSTANTS, helperFactory, $localstorage) {
-    var help = helperFactory,
-      tempElement,
+  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($scope, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
+    var tempElement,
       tempElementsArray,
       listService,
       defaultObject;
 
-    if (help.enableDebugging()) {
+    if ($help.enableDebugging()) {
       $scope.debug = true;
     }
 
@@ -55,7 +54,7 @@
       (function setupLocalStorage() {
         $scope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
 
-        if (helperFactory.isEmpty($scope.localData)) {
+        if ($help.isEmpty($scope.localData)) {
           defaultObject = {
             activeType: 1,
             types: {}
@@ -71,8 +70,8 @@
 
     function isDropAllowed(el, target, source, sibling) { // el, target, source, sibling
       if (
-        (!help.hasClass(source, CONSTANTS.CLASS_SORTABLE) && target === source) || // Don't change order when element is above source zone (exception: the zone is sortable)
-        help.hasClass(target, CONSTANTS.CLASS_NO_DROP) // Disallow drop on certain containers
+        (!$help.hasClass(source, CONSTANTS.CLASS_SORTABLE) && target === source) || // Don't change order when element is above source zone (exception: the zone is sortable)
+        $help.hasClass(target, CONSTANTS.CLASS_NO_DROP) // Disallow drop on certain containers
       ) {
         return false;
       }
@@ -122,7 +121,7 @@
         taskRank,
         taskSection;
 
-      typeId = help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
+      typeId = $help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
       typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
 
       taskRank = 3; //parseInt(target.attributes[CONSTANTS.ATTR_DATA_RANK]);
@@ -144,7 +143,7 @@
     function removeTaskIdLocally(taskId, source) {
       var typeId;
 
-      typeId = help.findAncestorByClass(source[0], CONSTANTS.CLASS_TYPE);
+      typeId = $help.findAncestorByClass(source[0], CONSTANTS.CLASS_TYPE);
       typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
 
       $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, typeId, taskId);
@@ -157,8 +156,8 @@
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
       // Add an indicator to each container which can be used to style relevant drop zones
-      tempElement = help.findAncestorByClass(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
-      help.addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      tempElement = $help.findAncestorByClass(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
+      $help.addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
         CONSTANTS.ATTR_DATA_TARGET + "]");
@@ -185,7 +184,7 @@
       // Get new date by attr of current el
       newDueDate = target.attributes[CONSTANTS.ATTR_DATA_DATE] ||
         // ... otherwise try parent (depends on target container layout)
-        help.findAncestorByClass(target, CONSTANTS.CLASS_DRAG_CONTAINER)
+        $help.findAncestorByClass(target, CONSTANTS.CLASS_DRAG_CONTAINER)
         .attributes[CONSTANTS.ATTR_DATA_DATE];
 
       taskId = element[0].attributes[CONSTANTS.ATTR_TASK_ID].value;
@@ -219,7 +218,7 @@
       var i = 0,
         l = tempElementsArray.length - 1;
 
-      help.removeClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      $help.removeClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
       while (i <= l) {
         tempElementsArray[i].setAttribute(CONSTANTS.ATTR_DATA_TARGET, "");
         i += 1;

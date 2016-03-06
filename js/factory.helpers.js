@@ -5,7 +5,7 @@
 
   var app = angular.module('prio.factory.helpers', []);
 
-  app.factory('helperFactory', function () {
+  app.factory('$help', function () {
     var helpers = this;
 
     // Note: No browser support for IE < 10

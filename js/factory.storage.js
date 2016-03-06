@@ -12,10 +12,9 @@
   'use strict';
 
   angular
-    .module('prio.factory.storage', ['prio.factory.helpers'])
-    .factory('$localstorage', ['$window', 'helperFactory', function ($window, helperFactory) {
-      var $localstorage = this,
-        help = helperFactory;
+    .module('prio.factory.storage', [])
+    .factory('$localstorage', ['$window', function ($window) {
+      var $localstorage = this;
 
       //      $localstorage.set = function (key, value) {
       //        $window.localStorage[key] = value;
