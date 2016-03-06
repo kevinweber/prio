@@ -3,6 +3,7 @@
 // TODO: Work on security
 // TODO: UX: When user drops task on drop zone, give some kind of feedback that he was successful
 // TODO: "Undo" functionality
+// TODO: Cancel drag'n'drop when ESC is pressed (https://github.com/bevacqua/dragula#drakecancelrevert)
 
 (function () {
   'use strict';
@@ -41,22 +42,22 @@
       activeType: 1,
       types: {
         1: {
-          1672515047: {
-            rank: 1,
-            section: 1
-          },
-          1693688746: {
-            rank: 3,
-            section: 2
-          },
-          1542135918: {
-            rank: 2,
-            section: 1
-          },
-          1542135918: {
-            rank: 8,
-            section: 4
-          }
+//          1672515047: {
+//            rank: 1,
+//            section: 1
+//          },
+//          1693688746: {
+//            rank: 3,
+//            section: 2
+//          },
+//          1542135918: {
+//            rank: 2,
+//            section: 1
+//          },
+//          1542135918: {
+//            rank: 8,
+//            section: 4
+//          }
         }
       }
     };
@@ -74,6 +75,7 @@
     $scope.tasks = listService.tasks;
     $scope.status = listService.status;
     $scope.date = listService.date;
+    $scope.showOverdue = true;
 
     /**
      * Dragula specific code
@@ -88,26 +90,16 @@
       }
       return true;
     }
+    
+    // Manually check if overdue tasks are available
+    function hasOverdueTasks() {
+      var overdueList = document.getElementById(CONSTANTS.ID_TASKS_OVERDUE);
+      return overdueList.firstElementChild;
+    }
 
     dragulaService.options($scope, 'draggable-tasks', {
       revertOnSpill: true,
       accepts: isDropAllowed
-    });
-
-    $scope.$on('draggable-tasks.drop', function (e, el, target, source) {
-      var newDueDate = target[0].attributes[CONSTANTS.ATTR_DATA_DATE],
-        id = el[0].attributes[CONSTANTS.ATTR_TASK_ID].value,
-        data;
-
-      if (newDueDate !== undefined && newDueDate.value !== '' && // Require date in target container
-        id !== undefined && id.value !== '') {
-
-        data = {
-          due_date: newDueDate.value
-        };
-
-        listService.updateTask(id, data);
-      }
     });
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
@@ -127,6 +119,34 @@
           indicator += 1;
         }
         i += 1;
+      }
+    });
+
+    $scope.$on('draggable-tasks.drop', function (e, el, target, source) {
+      var newDueDate,
+        id,
+        data;
+
+      // Get new date by attr of current el
+      newDueDate = target[0].attributes[CONSTANTS.ATTR_DATA_DATE] ||
+        // ... otherwise try parent (depends on target container layout)
+        help.findAncestor(target[0], CONSTANTS.CLASS_DRAG_CONTAINER)
+        .attributes[CONSTANTS.ATTR_DATA_DATE];
+      
+      id = el[0].attributes[CONSTANTS.ATTR_TASK_ID].value;
+
+      if (newDueDate !== undefined && newDueDate.value !== '' && // Require date in target container
+        id !== undefined && id.value !== '') {
+
+        data = {
+          due_date: newDueDate.value
+        };
+ 
+        listService.updateTask(id, data);
+        
+        if (!hasOverdueTasks())  {
+          $scope.showOverdue = false;
+        }
       }
     });
 

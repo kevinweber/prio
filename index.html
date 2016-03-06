@@ -59,7 +59,7 @@ browser</a>.</p>
     </div>
 
    
-    <div class="pure-g parent drag-container prio-type prio-type-1" ng-show="localData.activeType === 1" data-type="1">
+    <div class="pure-g parent drag-container prio-type prio-type-1" ng-show="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
       <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'">
         <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1"></li>
       </ul>
@@ -75,11 +75,11 @@ browser</a>.</p>
     </div>
 
 
-    <div class="pure-g parent drag-container" ng-show="tasks.taskIdsByDate.overdue.length">
+    <div class="pure-g parent drag-container" ng-show="tasks.taskIdsByDate.overdue.length && showOverdue">
       <div class="pure-u-1">
         <h2>Overdue</h2>
       </div>
-      <div class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
+      <div id="tasks-overdue" class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
         <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="tasks.taskIdsByDate.overdue.length"></div>
       </div>
     </div>

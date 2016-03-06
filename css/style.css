@@ -56,6 +56,10 @@ html {
   min-height: 100px;
 }
 
+.prio-type-1 > ul {
+  min-height: 100px;
+}
+
 .debug-status {
   background: rgba(255, 255, 255, 0.2);
   color: rgba(0, 0, 0, 0.7);
