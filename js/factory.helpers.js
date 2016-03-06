@@ -27,12 +27,23 @@
       }
     };
 
-    helpers.findAncestor = function (element, className) {
+    helpers.findAncestorByClass = function (element, className) {
       element = element.parentElement;
       if (element !== undefined && !helpers.hasClass(element, className)) {
-        element = helpers.findAncestor(element, className);
+        element = helpers.findAncestorByClass(element, className);
       }
       return element;
+    };
+
+    helpers.isEmpty = function (obj) {
+      var prop;
+
+      for (prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          return false;
+        }
+      }
+      return true;
     };
 
     helpers.enableDebugging = function () {

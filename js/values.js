@@ -6,17 +6,25 @@
   angular
     .module('prio.values', [])
     .value('CONSTANTS', {
-    
-      ATTR_DATA_TARGET: "data-drop-zone",
-      ATTR_DATA_DATE: "data-list-date",
-      ATTR_TASK_ID: "data-task-id",
-    
+      // Storage related
+      STORAGE_LOCAL_NAME: "prio",
+
+      // HTML IDs
       ID_TASKS_OVERDUE: "tasks-overdue",
-    
+
+      // HTML CLASS NAMES
       CLASS_DRAG_SOURCE: "drag-source",
       CLASS_DRAG_CONTAINER: "drag-container",
       CLASS_NO_DROP: "no-drop",
       CLASS_SORTABLE: "sortable",
-      CLASS_OVERDUE: "tasks-overdue"
+      CLASS_OVERDUE: "tasks-overdue",
+      CLASS_TYPE: "prio-type",
+
+      // HTML ATTRIBUTES
+      ATTR_DATA_TARGET: "data-drop-zone",
+      ATTR_DATA_DATE: "data-list-date",
+      ATTR_DATA_TYPE: "data-list-type",
+      ATTR_DATA_SECTION: "data-list-section",
+      ATTR_TASK_ID: "data-task-id"
     });
 }());

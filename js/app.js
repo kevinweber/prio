@@ -29,7 +29,8 @@
     var help = helperFactory,
       tempElement,
       tempElementsArray,
-      listService;
+      listService,
+      defaultObject;
 
     if (help.enableDebugging()) {
       $scope.debug = true;
@@ -37,45 +38,34 @@
 
     listService = wunderlistService.init(oauthConfig);
 
-
-    var data = {
-      activeType: 1,
-      types: {
-        1: {
-//          1672515047: {
-//            rank: 1,
-//            section: 1
-//          },
-//          1693688746: {
-//            rank: 3,
-//            section: 2
-//          },
-//          1542135918: {
-//            rank: 2,
-//            section: 1
-//          },
-//          1542135918: {
-//            rank: 8,
-//            section: 4
-//          }
-        }
-      }
-    };
-    $localstorage.setObject('prio', data);
-
     $scope.login = listService.login;
     if (!listService.isLoggedIn()) {
       return;
     }
 
-    $scope.localData = $localstorage.getObject('prio');
 
     listService.loadData();
 
-    $scope.tasks = listService.tasks;
-    $scope.status = listService.status;
-    $scope.date = listService.date;
-    $scope.showOverdue = true;
+    (function setupScope() {
+      $scope.tasks = listService.tasks;
+      $scope.status = listService.status;
+      $scope.date = listService.date;
+      $scope.showOverdue = true;
+
+      (function setupLocalStorage() {
+        $scope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
+
+        if (helperFactory.isEmpty($scope.localData)) {
+          defaultObject = {
+            activeType: 1,
+            types: {}
+          };
+          $localstorage.setObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
+        }
+
+        console.log($scope.localData);
+      }());
+    }());
 
     /**
      * Dragula specific code
@@ -90,11 +80,67 @@
       }
       return true;
     }
-    
+
     // Manually check if overdue tasks are available
     function hasOverdueTasks() {
       var overdueList = document.getElementById(CONSTANTS.ID_TASKS_OVERDUE);
       return overdueList.firstElementChild;
+    }
+
+    /* Local data is stored in the following format:
+     * activeType + types > typeId > taskId > taskRank + taskSection
+     * For example:
+     
+        var data = {
+          activeType: 1,
+          types: {
+            1: {
+              1670000000: {
+                rank: 1,
+                section: 1
+              },
+              1690000000: {
+                rank: 3,
+                section: 2
+              },
+              1540000000: {
+                rank: 2,
+                section: 1
+              },
+              ...
+            },
+            2: {
+              ...
+            }
+          }
+        };
+        
+     */
+
+    function storeDataLocally(taskId, target) {
+      var typeData = {},
+        typeId,
+        task = {},
+        taskRank,
+        taskSection;
+
+      typeId = help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
+      typeId = parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
+
+      taskRank = 3; //parseInt(target.attributes[CONSTANTS.ATTR_DATA_RANK]);
+      // Next step:
+      // Get all siblings and update their rank number, then return the rank for this specific task
+
+      taskSection = parseInt(target.attributes[CONSTANTS.ATTR_DATA_SECTION].value, 10);
+
+      task[taskId] = {
+        rank: taskRank,
+        section: taskSection
+      };
+
+      typeData.types = {};
+      typeData.types[typeId] = task;
+      $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
     }
 
     dragulaService.options($scope, 'draggable-tasks', {
@@ -104,7 +150,7 @@
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
       // Add an indicator to each container which can be used to style relevant drop zones
-      tempElement = help.findAncestor(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
+      tempElement = help.findAncestorByClass(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
       help.addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
@@ -122,30 +168,39 @@
       }
     });
 
-    $scope.$on('draggable-tasks.drop', function (e, el, target, source) {
+    $scope.$on('draggable-tasks.drop', function (e, element, target, source) {
       var newDueDate,
-        id,
+        taskId,
         data;
 
+      target = target[0];
+
       // Get new date by attr of current el
-      newDueDate = target[0].attributes[CONSTANTS.ATTR_DATA_DATE] ||
+      newDueDate = target.attributes[CONSTANTS.ATTR_DATA_DATE] ||
         // ... otherwise try parent (depends on target container layout)
-        help.findAncestor(target[0], CONSTANTS.CLASS_DRAG_CONTAINER)
+        help.findAncestorByClass(target, CONSTANTS.CLASS_DRAG_CONTAINER)
         .attributes[CONSTANTS.ATTR_DATA_DATE];
-      
-      id = el[0].attributes[CONSTANTS.ATTR_TASK_ID].value;
+
+      taskId = element[0].attributes[CONSTANTS.ATTR_TASK_ID].value;
 
       if (newDueDate !== undefined && newDueDate.value !== '' && // Require date in target container
-        id !== undefined && id.value !== '') {
+        taskId !== undefined && taskId.value !== '') {
 
+        // Update task via listService
         data = {
           due_date: newDueDate.value
         };
- 
-        listService.updateTask(id, data);
-        
-        if (!hasOverdueTasks())  {
+        listService.updateTask(taskId, data);
+
+        // Hide overdue section if no overdue tasks left
+        if (!hasOverdueTasks()) {
           $scope.showOverdue = false;
+          $scope.$apply();
+        }
+
+        // Store data locally
+        if (target.attributes[CONSTANTS.ATTR_DATA_SECTION]) {
+          storeDataLocally(taskId, target);
         }
       }
     });
