@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  var app = angular.module('prio', ['prio.values', 'prio.factory.helpers', 'prio.factory.storage', 'prio.service.wunderlist', angularDragula(angular)]),
+  var app = angular.module('prio', ['prio.values', 'prio.factory.helpers', 'prio.factory.storage', 'prio.service.wunderlist', angularDragula(angular), 'ngOrderObjectBy']),
     oauthConfig = {
       accessToken: '',
       accessCode: '',
@@ -36,10 +36,38 @@
 
     listService = wunderlistService.init(oauthConfig);
 
+
+    var data = {
+      activeType: 1,
+      types: {
+        1: {
+          1672515047: {
+            rank: 1,
+            section: 1
+          },
+          1693688746: {
+            rank: 3,
+            section: 2
+          },
+          1542135918: {
+            rank: 2,
+            section: 1
+          },
+          1542135918: {
+            rank: 8,
+            section: 4
+          }
+        }
+      }
+    };
+    $localstorage.setObject('prio', data);
+
     $scope.login = listService.login;
     if (!listService.isLoggedIn()) {
       return;
     }
+
+    $scope.localData = $localstorage.getObject('prio');
 
     listService.loadData();
 
