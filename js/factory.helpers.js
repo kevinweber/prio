@@ -10,26 +10,28 @@
 
     // Note: No browser support for IE < 10
     helpers.hasClass = function (element, className) {
-      return element.classList.contains(className);
+      if (element) {
+        return element.classList.contains(className);
+      }
     };
 
     // Note: No browser support for IE < 10
     helpers.addClass = function (element, className) {
-      if (!helpers.hasClass(element, className)) {
+      if (element && !helpers.hasClass(element, className)) {
         element.classList.add(className);
       }
     };
 
     // Note: No browser support for IE < 10
     helpers.removeClass = function (element, className) {
-      if (helpers.hasClass(element, className)) {
+      if (element && helpers.hasClass(element, className)) {
         element.classList.remove(className);
       }
     };
 
     helpers.findAncestorByClass = function (element, className) {
       element = element.parentElement;
-      if (element !== undefined && !helpers.hasClass(element, className)) {
+      if (element && !helpers.hasClass(element, className)) {
         element = helpers.findAncestorByClass(element, className);
       }
       return element;

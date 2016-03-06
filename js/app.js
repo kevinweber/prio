@@ -62,8 +62,6 @@
           };
           $localstorage.setObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
         }
-
-        console.log($scope.localData);
       }());
     }());
 
@@ -117,7 +115,7 @@
         
      */
 
-    function storeDataLocally(taskId, target) {
+    function storeTaskIdLocally(taskId, target) {
       var typeData = {},
         typeId,
         task = {},
@@ -125,7 +123,7 @@
         taskSection;
 
       typeId = help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
-      typeId = parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
+      typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
 
       taskRank = 3; //parseInt(target.attributes[CONSTANTS.ATTR_DATA_RANK]);
       // Next step:
@@ -141,6 +139,15 @@
       typeData.types = {};
       typeData.types[typeId] = task;
       $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+    }
+
+    function removeTaskIdLocally(taskId, source) {
+      var typeId;
+
+      typeId = help.findAncestorByClass(source[0], CONSTANTS.CLASS_TYPE);
+      typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
+
+      $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, typeId, taskId);
     }
 
     dragulaService.options($scope, 'draggable-tasks', {
@@ -200,7 +207,9 @@
 
         // Store data locally
         if (target.attributes[CONSTANTS.ATTR_DATA_SECTION]) {
-          storeDataLocally(taskId, target);
+          storeTaskIdLocally(taskId, target);
+        } else {
+          removeTaskIdLocally(taskId, source);
         }
       }
     });

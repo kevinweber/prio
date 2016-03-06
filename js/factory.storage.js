@@ -17,19 +17,19 @@
       var $localstorage = this,
         help = helperFactory;
 
-      $localstorage.set = function (key, value) {
-        $window.localStorage[key] = value;
-      };
-
-      $localstorage.get = function (key, defaultValue) {
-        return $window.localStorage[key] || defaultValue;
-      };
+      //      $localstorage.set = function (key, value) {
+      //        $window.localStorage[key] = value;
+      //      };
+      //
+      //      $localstorage.get = function (key, defaultValue) {
+      //        return $window.localStorage[key] || defaultValue;
+      //      };
 
       $localstorage.setObject = function (key, value) {
         $window.localStorage[key] = JSON.stringify(value);
       };
 
-      $localstorage.getObject = function (key, defaultObject) {
+      $localstorage.getObject = function (key) {
         return JSON.parse($window.localStorage[key] || '{}');
       };
 
@@ -40,6 +40,19 @@
         var merged = angular.merge({}, dest, src);
         $localstorage.setObject(key, merged);
         //        console.log(merged);
+      };
+
+      $localstorage.removeFromObject = function (key, typeId, taskId) {
+        function replacer(property, value) {
+          if (parseInt(property, 10) === parseInt(typeId, 10) && value[taskId]) {
+            delete value[taskId];
+            return value;
+          } else {
+            return value;
+          }
+        }
+
+        $window.localStorage[key] = JSON.stringify($localstorage.getObject(key), replacer);
       };
 
       $localstorage.clear = function () {
