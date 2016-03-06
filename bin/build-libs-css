@@ -1,0 +1,1 @@
+concat-cli -f src/libs/angular-dragula/dist/dragula.min.css src/libs/normalize.css src/libs/pure/*.css -o dist/css/libs.css; cssnano dist/css/libs.css dist/css/libs.css

@@ -1,0 +1,33 @@
+{
+  "name": "prio",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "autoprefixer": "^6.3.3",
+    "concat-cli": "^4.0.0",
+    "cssnano-cli": "^1.0.3",
+    "html-minifier": "^1.2.0",
+    "node-sass": "^3.4.2",
+    "postcss-cli": "^2.5.1",
+    "uglify-js": "^2.6.2"
+  },
+  "devDependencies": {
+    "node-sass": "^3.4.2",
+    "nodemon": "^1.9.0"
+  },
+  "scripts": {
+    "watch": "nodemon -e scss,js -x \"npm run build\"",
+    "watch-js": "nodemon -e js -i dist/ -x \"npm run build-js\"",
+    "watch-css": "nodemon -e scss -x \"npm run build-css\"",
+    "build": "npm run build-css; npm run build-js",
+    "build-js": "uglifyjs src/js/*.js -o dist/js/prio.js",
+    "build-css": "node-sass --include-path scss src/scss/index.scss   dist/css/prio.css; postcss --use autoprefixer -b '> 0%' -r dist/css/prio.css; cssnano dist/css/prio.css dist/css/prio.css",
+    "build-html": "html-minifier -o dist/index.html index.html --config-file build-html.conf",
+    "build-libs-js": "./bin/build-libs-js",
+    "build-libs-css": "./bin/build-libs-css",
+    "build-all": "npm run build; npm run build-libs-js; npm run build-libs-css"
+  },
+  "author": "Kevin Weber",
+  "license": ""
+}

@@ -1,0 +1,1 @@
+uglifyjs ./src/libs/angular/angular.min.js ./src/libs/angular-dragula/dist/angular-dragula.min.js ./src/libs/query-string/query-string.js ./src/libs/ngOrderObjectBy/ng-order-object-by.js ./src/libs/wunderlist.js/dist/wunderlist.sdk.min.js -o dist/js/libs.js

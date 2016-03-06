@@ -15,7 +15,7 @@
       unkown: "unkown"
     };
 
-  app.service('wunderlistService', function ($rootScope, $http) {
+  app.service('wunderlistService', ['$rootScope', '$http', function ($rootScope, $http) {
     // 'Safe' $apply via https://coderwall.com/p/ngisma/safe-apply-in-angular-js
     $rootScope.safeApply = function (fn) {
       var phase = this.$root.$$phase;
@@ -299,5 +299,5 @@
     return {
       init: init
     };
-  });
+  }]);
 }());
