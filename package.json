@@ -17,7 +17,7 @@
     "nodemon": "^1.9.0"
   },
   "scripts": {
-    "watch": "nodemon -e scss,js -x \"npm run build\"",
+    "watch": "nodemon -e scss,js -i dist/ -x \"npm run build\"",
     "watch-js": "nodemon -e js -i dist/ -x \"npm run build-js\"",
     "watch-css": "nodemon -e scss -x \"npm run build-css\"",
     "build": "npm run build-css; npm run build-js",
