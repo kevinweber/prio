@@ -1,12 +1,11 @@
 .custom-menu-wrapper {
-  background-color: #808080;
   margin-bottom: 2.5em;
   white-space: nowrap;
   position: relative;
 }
 
 .custom-menu {
-  display: inline-block;
+  display: block;
   width: auto;
   vertical-align: middle;
   -webkit-font-smoothing: antialiased;
@@ -14,12 +13,18 @@
 
 .custom-menu .pure-menu-link,
 .custom-menu .pure-menu-heading {
-  color: white;
+  color: $color-black;
 }
 
-.custom-menu .pure-menu-link:hover,
-.custom-menu .pure-menu-heading:hover {
-  background-color: transparent;
+.custom-menu .pure-menu-link {
+  &:hover,
+  &:active,
+  &:focus {
+    background-color: transparent;
+  }
+  &:hover {
+    color: $color-link;
+  }
 }
 
 .custom-menu-top {
@@ -30,8 +35,15 @@
 
 .custom-menu-brand {
   display: block;
-  text-align: center;
+  font-family: poiret-one, sans-serif;
   position: relative;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: lowercase;
+  font-size: 20px;
+  line-height: 1em;
+  padding-top: .3em;
+  padding-bottom: .4em;
 }
 
 .custom-menu-toggle {
@@ -39,13 +51,18 @@
   height: 44px;
   display: block;
   position: absolute;
-  top: 3px;
+  top: 5px;
   right: 0;
   display: none;
+  &:hover {
+    .bar {
+      background-color: $color-link;
+    }
+  }
 }
 
 .custom-menu-toggle .bar {
-  background-color: white;
+  background-color: $color-black;
   display: block;
   width: 20px;
   height: 2px;
@@ -67,6 +84,7 @@
 }
 
 .custom-menu-toggle.x .bar {
+  top: 19px;
   -webkit-transform: rotate(45deg);
   -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
@@ -98,55 +116,58 @@
   transform: translateY(-44px);
 }
 
-@media (max-width: 62em) {
-  .custom-menu {
-    display: block;
-  }
-  .custom-menu-toggle {
-    display: block;
-    display: none\9;
-  }
-  .custom-menu-bottom {
-    position: absolute;
-    width: 100%;
-    border-top: 1px solid #eee;
-    background-color: #808080\9;
-    z-index: 100;
-  }
-  .custom-menu-bottom .pure-menu-link {
-    opacity: 1;
-    -webkit-transform: translateX(0);
-    -moz-transform: translateX(0);
-    -ms-transform: translateX(0);
-    transform: translateX(0);
-    -webkit-transition: all .3s;
-    -moz-transition: all .3s;
-    -ms-transition: all .3s;
-    transition: all .3s;
-  }
-  .custom-menu-bottom.custom-menu-tucked .pure-menu-link {
-    -webkit-transform: translateX(-140px);
-    -moz-transform: translateX(-140px);
-    -ms-transform: translateX(-140px);
-    transform: translateX(-140px);
-    opacity: 0;
-    opacity: 1\9;
-  }
-  .pure-menu-horizontal:not(.custom-menu-tucked) {
-    -webkit-transition: background .3s;
-    -moz-transition: background .3s;
-    -ms-transition: background .3s;
-    transition: background .3s;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .pure-menu-horizontal.custom-menu-tucked {
-    -webkit-transition: background .3s;
-    -moz-transition: background .3s;
-    -ms-transition: background .3s;
-    transition: background .3s;
-    background-color: transparent;
-    z-index: -1;
-    position: absolute;
-    overflow: hidden;
-  }
+.custom-menu-toggle {
+  display: block;
+  display: none\9;
+}
+
+.custom-menu-bottom {
+  width: 100%;
+  border-top: 1px solid #eee;
+  z-index: 1;
+  background: linear-gradient(#f3f3f3 0%, #f6f6f6 5%, #f6f6f6 95%, #f3f3f3 100%);
+}
+
+.custom-menu-bottom .pure-menu-link {
+  opacity: 1;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -ms-transition: all .3s;
+  transition: all .3s;
+}
+
+.custom-menu-bottom.custom-menu-tucked .pure-menu-link {
+  -webkit-transform: translateX(-140px);
+  -moz-transform: translateX(-140px);
+  -ms-transform: translateX(-140px);
+  transform: translateX(-140px);
+  opacity: 0;
+  opacity: 1\9;
+}
+
+.pure-menu-horizontal:not(.custom-menu-tucked) {
+  -webkit-transition: background .3s, max-height .3s, padding .3s;
+  -moz-transition: background .3s, max-height .3s, padding .3s;
+  -ms-transition: background .3s, max-height .3s, padding .3s;
+  transition: background .3s, max-height .3s, padding .3s;
+}
+
+.pure-menu-horizontal.custom-menu-tucked {
+  -webkit-transition: background .3s, max-height .3s, padding .3s;
+  -moz-transition: background .3s, max-height .3s, padding .3s;
+  -ms-transition: background .3s, max-height .3s, padding .3s;
+  transition: background .3s, max-height .3s, padding .3s;
+  z-index: -1;
+  overflow: hidden;
+  max-height: 200px;
+  padding: 0;
+}
+
+.pure-menu-horizontal.pure-menu-scrollable.custom-menu-tucked {
+  padding: 0;
+  max-height: 0;
 }

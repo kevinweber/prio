@@ -42,7 +42,7 @@
       return;
     }
 
-
+    $scope.loggedIn = true;
     listService.loadData();
 
     (function setupScope() {

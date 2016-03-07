@@ -22,32 +22,37 @@
 
   <link href='../dist/css/prio.css' rel='stylesheet' />
   <title>Prio</title>
+  
+  <script src="../dist/js/typekit/poiret-one.js"></script>
 </head>
 
 <body ng-app='prio' ng-controller='AppCtrl'>
   <!--[if lt IE 10]>
-<p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="http://browsehappy.com/">Upgrade to a different 
+<p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="//browsehappy.com/">Upgrade to a different 
 browser</a>.</p>
 <![endif]-->
 
   <header>
     <nav class="custom-menu-wrapper">
       <div class="pure-menu custom-menu custom-menu-top">
-        <a href="#" class="pure-menu-heading custom-menu-brand">Prio</a>
+        <span class="pure-menu-heading custom-menu-brand">Prio</span>
         <a href="#" class="custom-menu-toggle" id="toggle"><s class="bar"></s><s class="bar"></s></a>
       </div>
       <div class="pure-menu pure-menu-horizontal pure-menu-scrollable custom-menu custom-menu-bottom custom-menu-tucked" id="tuckedMenu">
         <div class="custom-menu-screen"></div>
         <ul class="pure-menu-list">
-          <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
-          <li class="pure-menu-item"><a href="#" class="pure-menu-link" ng-click="login()">Login/Logout</a></li>
-          <li class="pure-menu-item"><a href="#" class="pure-menu-link">Contact</a></li>
+          <!--          <li class="pure-menu-item"><a href="#" class="pure-menu-link">What's this?</a></li>-->
+          <li class="pure-menu-item"><a href="//kevinw.de/contact/" class="pure-menu-link">Give Feedback</a></li>
+          <li class="pure-menu-item"><a href="//twitter.com/kevinweber" class="pure-menu-link" target="_blank">Follow on Twitter</a></li>
+          <li class="pure-menu-item"><a href="./" class="pure-menu-link" ng-if="loggedIn">Logout</a></li>
         </ul>
       </div>
     </nav>
   </header>
 
   <main>
+
+    <li class="pure-menu-item"><a href="#" class="pure-menu-link" ng-click="login()" ng-if="!loggedIn">Login</a></li>
 
     <!--      <li ng-repeat="(key,value) in tasks">test{{value}}</li>-->
 
