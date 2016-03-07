@@ -21,12 +21,13 @@
     "watch-js": "nodemon -e js -i dist/ -x \"npm run build-js\"",
     "watch-css": "nodemon -e scss -x \"npm run build-css\"",
     "build": "npm run build-css; npm run build-js",
-    "build-js": "uglifyjs src/js/*.js -o dist/js/prio.js",
-    "build-css": "node-sass --include-path scss src/scss/index.scss   dist/css/prio.css; postcss --use autoprefixer -b '> 0%' -r dist/css/prio.css; cssnano dist/css/prio.css dist/css/prio.css",
-    "build-html": "html-minifier -o dist/index.html index.html --config-file build-html.conf",
+    "build-js": "mkdir -p dist/js; uglifyjs src/js/*.js -o dist/js/prio.js --source-map dist/js/prio.js.map",
+    "build-css": "node-sass --include-path scss src/scss/index.scss   dist/css/prio.css --source-map dist/css/prio.css.map; postcss --use autoprefixer -b '> 0%' -r dist/css/prio.css; cssnano dist/css/prio.css dist/css/prio.css",
+    "build-templates": "./bin/build-templates",
     "build-libs-js": "./bin/build-libs-js",
     "build-libs-css": "./bin/build-libs-css",
-    "build-all": "npm run build; npm run build-libs-js; npm run build-libs-css"
+    "build-other": "./bin/build-other",
+    "build-production": "npm run build; npm run build-libs-js; npm run build-libs-css; npm run build-templates; npm run build-other"
   },
   "author": "Kevin Weber",
   "license": ""

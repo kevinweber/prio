@@ -1,0 +1,13 @@
+# Copy root files
+echo "> Copy root files..."
+cp src/{index.html,callback.php,private.settings.php,settings.php} dist/
+
+# Minify HTML
+echo "> Minify HTML..."
+html-minifier -o dist/index.html dist/index.html --config-file build-html.conf
+
+# Remove non-public distribution path
+echo "> Remove non-public distribution path..."
+sed -i '' 's/..\/dist\///g' dist/index.html
+
+echo "> Done"

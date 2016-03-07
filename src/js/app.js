@@ -14,7 +14,7 @@
       accessCode: '',
       clientID: '16551d4c73904985c4f0',
       // TODO: Security: Display client secret? Only server-side? Not Github! http://stackoverflow.com/questions/6144826/secure-oauth-in-javascript
-      redirectUrl: 'http://localhost/git/prio/callback.php',
+      redirectUrl: 'http://localhost/git/prio/src/callback.php',
       // TODO: Security: Generate this random string randomly actually
       // and check that string server-side
       random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'

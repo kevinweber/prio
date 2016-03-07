@@ -1,0 +1,4 @@
+# Copy images
+echo "> Copy images..."
+cp -R src/img/ dist/img/
+echo "> Done"
