@@ -1,0 +1,87 @@
+/* Buzz Out */
+
+// Source: https://github.com/IanLunn/Hover
+@include keyframes(buzz-out) {
+  10% {
+    @include prefixed(transform, translateX(3px) rotate(2deg));
+  }
+  20% {
+    @include prefixed(transform, translateX(-3px) rotate(-2deg));
+  }
+  30% {
+    @include prefixed(transform, translateX(3px) rotate(2deg));
+  }
+  40% {
+    @include prefixed(transform, translateX(-3px) rotate(-2deg));
+  }
+  50% {
+    @include prefixed(transform, translateX(2px) rotate(1deg));
+  }
+  60% {
+    @include prefixed(transform, translateX(-2px) rotate(-1deg));
+  }
+  70% {
+    @include prefixed(transform, translateX(2px) rotate(1deg));
+  }
+  80% {
+    @include prefixed(transform, translateX(-2px) rotate(-1deg));
+  }
+  90% {
+    @include prefixed(transform, translateX(1px) rotate(0));
+  }
+  100% {
+    @include prefixed(transform, translateX(-1px) rotate(0));
+  }
+}
+
+// Based on https://github.com/IanLunn/Hover
+@mixin buzz-out($delay: 0s) {
+  @include hacks();
+  &:hover,
+  &:focus,
+  &:active {
+    @include prefixed(animation-name, buzz-out);
+    @include prefixed(animation-duration, .75s);
+    @include prefixed(animation-timing-function, linear);
+    @include prefixed(animation-iteration-count, 1);
+    @include prefixed(animation-delay, $delay);
+  }
+}
+
+
+/* Ripple Out */
+
+// Source: https://github.com/IanLunn/Hover
+@include keyframes(ripple-out) {
+  100% {
+    top: -(6px + 6px);
+    right: -(6px + 6px);
+    bottom: -(6px + 6px);
+    left: -(6px + 6px);
+    opacity: 0;
+  }
+}
+
+// Based on https://github.com/IanLunn/Hover
+@mixin ripple-out($color, $delay: 0s) {
+  $outerBorderWidth: 6px;
+  $innerBorderWidth: 6px;
+  @include hacks();
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    border: #{$color} solid $outerBorderWidth;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @include prefixed(animation-duration, 1s);
+  }
+  &:hover:before,
+  &:focus:before,
+  &:active:before {
+    @include prefixed(animation-name, ripple-out);
+    @include prefixed(animation-delay, $delay);
+  }
+}

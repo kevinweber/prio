@@ -21,12 +21,12 @@
   -->
 
   <link href='../dist/css/prio.css' rel='stylesheet' />
-  <title>Prio</title>
-  
+  <title>prio.today</title>
+
   <script src="../dist/js/typekit/poiret-one.js"></script>
 </head>
 
-<body ng-app='prio' ng-controller='AppCtrl'>
+<body ng-class="!loggedIn ? 'login' : ''" ng-app='prio' ng-controller='AppCtrl'>
   <!--[if lt IE 10]>
 <p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="//browsehappy.com/">Upgrade to a different 
 browser</a>.</p>
@@ -35,7 +35,7 @@ browser</a>.</p>
   <header>
     <nav class="custom-menu-wrapper">
       <div class="pure-menu custom-menu custom-menu-top">
-        <span class="pure-menu-heading custom-menu-brand">Prio</span>
+        <span class="pure-menu-heading custom-menu-brand">prio.today</span>
         <a href="#" class="custom-menu-toggle" id="toggle"><s class="bar"></s><s class="bar"></s></a>
       </div>
       <div class="pure-menu pure-menu-horizontal pure-menu-scrollable custom-menu custom-menu-bottom custom-menu-tucked" id="tuckedMenu">
@@ -51,65 +51,71 @@ browser</a>.</p>
   </header>
 
   <main>
-
-    <li class="pure-menu-item"><a href="#" class="pure-menu-link" ng-click="login()" ng-if="!loggedIn">Login</a></li>
-
     <!--      <li ng-repeat="(key,value) in tasks">test{{value}}</li>-->
-
     <div class="debug-status debug-status-{{status.code}}" ng-if="status.message && debug">
       <p>Status: <span ng-bind='status.message'></span></p>
     </div>
 
 
-    <div class="pure-g parent drag-container prio-type prio-type-1" ng-show="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
-      <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="1">
-        <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1"></li>
-      </ul>
-      <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="2">
-        <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 2"></li>
-      </ul>
-      <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="3">
-        <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 3"></li>
-      </ul>
-      <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="4">
-        <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 4"></li>
-      </ul>
+    <div class="login__cell">
+      <div class="login__cell__welcome">
+      <p class="intro">Let's be honest: Having no time is not an excuse. It's the matter of priorities.</p>
+      
+      <a href="#" class="btn btn-primary btn-buzz-out" ng-click="login()" ng-if="!loggedIn">Login with Wunderlist account</a></div>
     </div>
 
 
-    <div class="pure-g parent drag-container" ng-show="tasks.taskIdsByDate.overdue.length && showOverdue">
-      <div class="pure-u-1">
-        <h2>Overdue</h2>
+    <div id="tool" ng-if="loggedIn">
+      <div class="pure-g parent drag-container prio-type prio-type-1" ng-show="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
+        <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="1">
+          <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1"></li>
+        </ul>
+        <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="2">
+          <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 2"></li>
+        </ul>
+        <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="3">
+          <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 3"></li>
+        </ul>
+        <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="4">
+          <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 4"></li>
+        </ul>
       </div>
-      <div id="tasks-overdue" class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
-        <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+
+
+      <div class="pure-g parent drag-container" ng-show="tasks.taskIdsByDate.overdue.length && showOverdue">
+        <div class="pure-u-1">
+          <h2>Overdue</h2>
+        </div>
+        <div id="tasks-overdue" class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
+          <div ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+        </div>
       </div>
-    </div>
-    <div class="pure-g parent drag-container" data-drop-zone="">
-      <div class="pure-u-1">
-        <h2>Today</h2>
+      <div class="pure-g parent drag-container" data-drop-zone="">
+        <div class="pure-u-1">
+          <h2>Today</h2>
+        </div>
+        <div class="pure-u-1 task-list tasks-today" dragula="'draggable-tasks'" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
+          <div class="hidden drop-zone">Today</div>
+          <div ng-repeat="taskId in tasks.taskIdsByDate.today track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+        </div>
       </div>
-      <div class="pure-u-1 task-list tasks-today" dragula="'draggable-tasks'" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
-        <div class="hidden drop-zone">Today</div>
-        <div ng-repeat="taskId in tasks.taskIdsByDate.today track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+      <div class="pure-g parent drag-container" data-drop-zone="">
+        <div class="pure-u-1">
+          <h2>Tomorrow</h2>
+        </div>
+        <div class="pure-u-1 task-list tasks-tomorrow" dragula="'draggable-tasks'" data-list-date="{{date.tomorrow | date: 'yyyy-MM-dd'}}">
+          <div class="hidden drop-zone">Tomorrow</div>
+          <div ng-repeat="taskId in tasks.taskIdsByDate.tomorrow track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+        </div>
       </div>
-    </div>
-    <div class="pure-g parent drag-container" data-drop-zone="">
-      <div class="pure-u-1">
-        <h2>Tomorrow</h2>
-      </div>
-      <div class="pure-u-1 task-list tasks-tomorrow" dragula="'draggable-tasks'" data-list-date="{{date.tomorrow | date: 'yyyy-MM-dd'}}">
-        <div class="hidden drop-zone">Tomorrow</div>
-        <div ng-repeat="taskId in tasks.taskIdsByDate.tomorrow track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
-      </div>
-    </div>
-    <div class="pure-g parent drag-container" data-drop-zone="">
-      <div class="pure-u-1">
-        <h2>Week</h2>
-      </div>
-      <div class="pure-u-1 task-list tasks-week" dragula="'draggable-tasks'" data-list-date="{{date.week | date: 'yyyy-MM-dd'}}">
-        <div class="hidden drop-zone">Week</div>
-        <div ng-repeat="taskId in tasks.taskIdsByDate.week track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+      <div class="pure-g parent drag-container" data-drop-zone="">
+        <div class="pure-u-1">
+          <h2>Week</h2>
+        </div>
+        <div class="pure-u-1 task-list tasks-week" dragula="'draggable-tasks'" data-list-date="{{date.week | date: 'yyyy-MM-dd'}}">
+          <div class="hidden drop-zone">Week</div>
+          <div ng-repeat="taskId in tasks.taskIdsByDate.week track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></div>
+        </div>
       </div>
     </div>
   </main>

@@ -1,0 +1,52 @@
+.btn {
+  color: $color-black;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-block;
+  zoom: 1;
+  line-height: normal;
+  padding: 1em 2em;
+  text-align: center;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  &:after {
+    $oversize-x: 2;
+    background-color: $color-black;
+    content: " ";
+    display: block;
+    height: 2px;
+    margin-bottom: -1px;
+    margin-left: -1% * ($oversize-x/2);
+    opacity: 0;
+    position: relative;
+    top: 1px;
+    transition: opacity .3s;
+    width: 100% + $oversize-x;
+    z-index: -1;
+  }
+  &:hover:after {
+    opacity: 1;
+  }
+}
+
+.btn-primary {
+  background: $color-primary;
+  color: $color-white;
+  &:after {
+    background-color: $color-white;
+  }
+}
+
+.btn-ripple-out {
+  @include ripple-out($color-primary, 3s);
+}
+
+.btn-buzz-out {
+  @include buzz-out(3s);
+}

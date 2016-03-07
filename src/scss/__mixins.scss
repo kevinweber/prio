@@ -1,0 +1,81 @@
+/*
+ * __mixins.scss
+*/
+
+
+/*
+ * Viewport "vmin": 1/100th of the smallest side
+ * Hint: IE9 does not support "vmax" at all so we don't need
+ * an extra mixin for that
+*/
+
+@mixin vmin($property, $hundredths) {
+  #{$property}: $hundredths + vm; // IE9 fallback
+  #{$property}: $hundredths + vmin;
+}
+
+
+/*
+ * Fallback for RGBA
+ * Use three or four parameters.
+ * If $fallback_hide = true, make color transparent
+ * (instead of 100% coloured/visible)
+*/
+
+@mixin rgba($property, $color, $opacity, $fallback_hide: false) {
+  @if $fallback_hide==true {
+    #{$property}: transparent;
+  }
+  @else {
+    #{$property}: #{$color};
+  }
+  #{$property}: rgba($color, $opacity);
+}
+
+// Prefix declarations
+@mixin prefixed($property, $value) {
+  @if $webkit==true {
+    -webkit-#{$property}: #{$value};
+  }
+  @if $moz==true {
+    -moz-#{$property}: #{$value};
+  }
+  @if $ms==true {
+    -ms-#{$property}: #{$value};
+  }
+  @if $o==true {
+    -o-#{$property}: #{$value};
+  }
+  #{$property}: #{$value};
+}
+
+// Prefix keyframes
+@mixin keyframes($name) {
+  @if $webkit==true {
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $moz==true {
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $ms==true {
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $o==true {
+    @-o-keyframes #{$name} {
+      @content;
+    }
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+// Discover useful mixins:
+// http://coderesponsible.com/useful-sass-mixins/
+// https://github.com/gillesbertaux/andy/blob/master/andy.scss

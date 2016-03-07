@@ -1,4 +1,5 @@
 .custom-menu-wrapper {
+  @include rgba(background-color, $color-white, .4);
   margin-bottom: 2.5em;
   white-space: nowrap;
   position: relative;
@@ -35,7 +36,7 @@
 
 .custom-menu-brand {
   display: block;
-  font-family: poiret-one, sans-serif;
+  font-family: poiret-one, Helvetica, Arial, sans-serif;
   position: relative;
   font-weight: bold;
   letter-spacing: 2px;

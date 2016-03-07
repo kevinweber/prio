@@ -1,0 +1,75 @@
+.login {
+  background-image: url(../img/login.jpg);
+  background-position: center center;
+  background-size: cover;
+  display: table;
+  min-height: 100vh;
+  width: 100%;
+  header {
+    display: table-header-group;
+  }
+  main {
+    display: table-row;
+    > div {
+      display: table-cell;
+      padding-bottom: 0;
+      text-align: center;
+      vertical-align: bottom;
+    }
+  }
+  &__cell__welcome {
+    @include rgba(background-color, $color-white, .4);
+    height: 100%;
+    margin: 0 auto;
+    padding: 4vh 4vw;
+    width: 100%;
+    .intro {
+      @include rgba(background-color, $color-white, .7);
+      display: inline;
+      padding: 5px 0 4px;
+      line-height: 27px;
+      box-shadow: 6px 0 0 $color-white, -7px 0 0 $color-white;
+      box-shadow: 6px 0 0 rgba($color-white, .7), -7px 0 0 rgba($color-white, .7);
+      &:after {
+        content: " ";
+        display: block;
+      }
+    }
+    .btn {
+      margin-top: 1.3em;
+    }
+  }
+  .custom-menu-wrapper {
+    margin-bottom: 0;
+  }
+  .custom-menu-bottom {
+    @include rgba(background, $color-white, .4);
+    border-top: 0;
+  }
+  @media screen and (min-width: 25em) {
+    &__cell__welcome {
+      padding: 4vh 12vw;
+    }
+  }
+  @media screen and (min-width: 35.5em) {
+    main {
+      > div {
+        padding-bottom: 10vh;
+      }
+    }
+    &__cell__welcome {
+      padding: 4vw;
+      width: 60vw;
+    }
+  }
+  @media screen and (min-width: 48em) {
+    main {
+      > div {
+        padding-bottom: 5vh;
+      }
+    }
+    &__cell__welcome {
+      width: 50vw;
+    }
+  }
+}
