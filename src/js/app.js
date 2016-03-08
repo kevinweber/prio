@@ -25,7 +25,7 @@
     document.getElementById('toggle').classList.toggle('x');
   });
 
-  app.controller('AppCtrl', ['$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($scope, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
+  app.controller('AppCtrl', ['$rootScope', '$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($rootScope, $scope, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
     var tempElement,
       tempElementsArray,
       listService,
@@ -52,7 +52,7 @@
       $scope.showOverdue = true;
 
       (function setupLocalStorage() {
-        $scope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
+        $rootScope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME);
 
         if ($help.isEmpty($scope.localData)) {
           defaultObject = {

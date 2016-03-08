@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  var app = angular.module('prio.service.wunderlist', []),
+  var app = angular.module('prio.service.wunderlist', ['prio.factory.storage']),
     WunderlistSDK = window.wunderlist.sdk,
     wunderlistApiUrl = 'https://a.wunderlist.com/api/v1/',
     timeSpan = {
@@ -15,7 +15,7 @@
       unkown: "unkown"
     };
 
-  app.service('wunderlistService', ['$rootScope', '$http', function ($rootScope, $http) {
+  app.service('wunderlistService', ['$rootScope', '$http', '$localstorageWunderlist', function ($rootScope, $http, $localstorageWunderlist) {
     // 'Safe' $apply via https://coderwall.com/p/ngisma/safe-apply-in-angular-js
     $rootScope.safeApply = function (fn) {
       var phase = this.$root.$$phase;
@@ -146,9 +146,15 @@
           storeTasksById(task);
         });
       },
+        
+      updateLocalTasks = function (tasks) {
+        $localstorageWunderlist.deleteLocalTasks(tasksById);
+      },
 
       loadAllTasks = function () {
         updateStatus("Loading tasks ...");
+        
+        var listLength = allListIds.length;
 
         // Initiate current time only once
         setCurrentTime();
@@ -157,9 +163,9 @@
           WunderlistAPI.http.tasks.forList(id)
             .done(function (tasksData, statusCode) {
               storeTasks(tasksData);
-
-              // We have to safeApply changes when we went through everything in order to update the scope
-              if (key + 1 === allListIds.length) { // key + 1 might be faster than allListIds.length
+            
+              if (key + 1 === listLength) {
+                updateLocalTasks();
                 updateStatus("Loaded tasks successfully", statusCode);
               }
             })
