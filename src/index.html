@@ -26,7 +26,7 @@
   <script src="../dist/js/typekit/poiret-one.js"></script>
 </head>
 
-<body ng-class="loggedIn ? '' : 'login'" ng-app='prio' ng-controller='AppCtrl'>
+<body ng-class="isLoggedIn ? '' : 'login'" ng-app='prio' ng-controller='AppCtrl'>
   <!--[if lt IE 10]>
 <p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="//browsehappy.com/">Upgrade to a different 
 browser</a>.</p>
@@ -44,7 +44,7 @@ browser</a>.</p>
           <!--          <li class="pure-menu-item"><a href="#" class="pure-menu-link">What's this?</a></li>-->
           <li class="pure-menu-item"><a href="//kevinw.de/contact/" class="pure-menu-link">Give Feedback</a></li>
           <li class="pure-menu-item"><a href="//twitter.com/kevinweber" class="pure-menu-link" target="_blank">Follow on Twitter</a></li>
-          <li class="pure-menu-item"><a href="./" class="pure-menu-link" ng-if="loggedIn">Logout</a></li>
+          <li class="pure-menu-item"><a href="./" class="pure-menu-link" ng-if="isLoggedIn">Logout</a></li>
         </ul>
       </div>
     </nav>
@@ -57,15 +57,18 @@ browser</a>.</p>
     </div>
 
 
-    <div class="login__cell" ng-if="!loggedIn">
+    <div class="login__cell" ng-if="!isLoggedIn">
       <div class="login__cell__welcome">
       <p class="intro">Let's be honest: Having no time is not an excuse. It's the matter of priorities.</p>
       
-      <a href="#" class="btn btn-primary btn-buzz-out" ng-click="login()" ng-if="!loggedIn">Login with Wunderlist account</a></div>
+      <a href="#" class="btn btn-primary btn-buzz-out" ng-click="login()" ng-if="!isLoggedIn">Login with Wunderlist account</a></div>
     </div>
 
+    <div class="loading__cell" ng-if="isLoggedIn && !isLoaded">
+      Loading ...
+    </div>
 
-    <div id="tool" ng-if="loggedIn">
+    <div id="tool" ng-if="isLoggedIn && isLoaded">
       <div class="pure-g parent drag-container prio-type prio-type-1" ng-show="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
         <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="1">
           <li ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1"></li>

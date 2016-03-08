@@ -166,6 +166,7 @@
             
               if (key + 1 === listLength) {
                 updateLocalTasks();
+                $rootScope.isLoaded = true;
                 updateStatus("Loaded tasks successfully", statusCode);
               }
             })

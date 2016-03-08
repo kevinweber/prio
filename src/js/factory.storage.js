@@ -24,9 +24,7 @@
 
         for (typeId in localTasks) {
           if (localTasks.hasOwnProperty(typeId)) {
-            // typeId -> typeId
             for (taskId in localTasks[typeId]) {
-              // taskId -> taskId
               if (localTasks[typeId].hasOwnProperty(taskId)) {
                 // Test if wunderlistTasks with certain taskId (still) exists
                 if (!wunderlistTasks[taskId]) {

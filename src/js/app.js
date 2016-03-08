@@ -42,7 +42,8 @@
       return;
     }
 
-    $scope.loggedIn = true;
+    $scope.isLoggedIn = true;
+    $rootScope.isLoaded = false;
     listService.loadData();
 
     (function setupScope() {
