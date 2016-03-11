@@ -25,11 +25,14 @@
     document.getElementById('toggle').classList.toggle('x');
   });
 
-  app.controller('AppCtrl', ['$rootScope', '$scope', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($rootScope, $scope, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
+  app.controller('AppCtrl', ['$window', '$document', '$rootScope', '$scope', '$interval', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($window, $document, $rootScope, $scope, $interval, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
     var tempElement,
       tempElementsArray,
       listService,
-      defaultObject;
+      defaultObject,
+      scrollInterval,
+      scrollDirection,
+      scrollSpeed = 20;
 
     if ($help.enableDebugging()) {
       $scope.debug = true;
@@ -149,6 +152,40 @@
 
       $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, typeId, taskId);
     }
+
+
+
+    function isDragging() {
+      return dragulaService.find($scope, 'draggable-tasks').drake.dragging;
+    }
+
+    function scrollWindow(event) {
+      if (isDragging()) {
+        var bottom = $window.innerHeight - 50,
+          top = 50;
+
+        if (event.clientY > bottom && ($window.scrollY + $window.innerHeight < $document[0].body.scrollHeight)) {
+          scrollDirection = 'down';
+        } else if (event.clientY < top && $window.scrollY > 0) {
+          scrollDirection = 'up';
+        } else {
+          scrollDirection = '';
+        }
+      }
+    }
+
+    (function initDragScrolling() {
+      $window.onmousemove = scrollWindow;
+      scrollInterval = $interval(function () {
+        if (scrollDirection === 'up') {
+          $window.scrollBy(0, -4);
+        } else if (scrollDirection === 'down') {
+          $window.scrollBy(0, 4);
+        }
+      }, scrollSpeed / 4);
+    }());
+
+
 
     dragulaService.options($scope, 'draggable-tasks', {
       revertOnSpill: true,
