@@ -1,0 +1,29 @@
+.login,
+.loggedin {
+  .bg-image {
+    background-image: url(../img/login.jpg);
+    background-position: center center;
+    background-size: cover;
+    height: 100vh;
+    left: 0;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    z-index: -1;
+  }
+  .bg-image-removed {
+    animation: bg-loading .5s 1 forwards;
+  }
+}
+
+@keyframes bg-loading {
+  0% {
+    filter: brightness(none) grayscale(0);
+    opacity: 1;
+  }
+  100% {
+    filter: brightness(8) grayscale(100);
+    opacity: 0;
+  }
+}

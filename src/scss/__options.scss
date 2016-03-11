@@ -1,4 +1,28 @@
-// Browser Prefixes - Which CSS prefixes should be used?
+/*
+ * Colors
+*/
+
+$color-black: #2c2c29;
+$color-white: #fff;
+// Orange
+$color-primary: #FF6600;
+$color-primary-light: #FFF0E6;
+//$color-primary-dark: #FF6600;
+// Purple
+//$color-primary: #be46ad;
+//$color-primary-dark: #711364;
+$color-secondary: #ffe78d;
+$color-secondary-dark: #ffd740;
+$color-link: $color-primary;
+
+@mixin brandFont {
+  font-family: poiret-one, Helvetica, Arial, sans-serif;
+}
+
+/*
+ * Browser Prefixes - Which CSS prefixes should be used?
+*/
+
 $webkit: true !default;
 $moz: false !default;
 $ms: false !default;

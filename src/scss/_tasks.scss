@@ -1,0 +1,21 @@
+.tool {
+  z-index: 3;
+  
+  .drag-container {
+    padding: 0 1em;
+  }
+  .task-list {
+    min-height: 100px;
+  }
+  .prio-type-1 > ul {
+    min-height: 100px;
+  }
+  .task {
+    cursor: grab;
+  }
+}
+
+// Currently dragged task
+.gu-mirror {
+  cursor: grabbing;
+}

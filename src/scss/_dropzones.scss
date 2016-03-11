@@ -1,0 +1,38 @@
+.drag-container .drop-zone {
+  bottom: 0;
+  display: block;
+  height: 7vm;
+  height: 7vmin;
+  left: 50%;
+  margin: 0;
+  margin-bottom: -7vm;
+  margin-bottom: -7vmin;
+  opacity: 0;
+  position: fixed;
+  text-align: center;
+  transform: translateX(-50%);
+  transition: margin .3s ease-in, left .3s ease-in, opacity .3s ease-in, background .3s ease-in, transform .4s ease-in;
+  width: 33.33%;
+}
+
+.gu-unselectable .drag-container .drop-zone {
+  margin-bottom: 0;
+  opacity: 1;
+  transform: translateX(0);
+  transition: margin .2s ease-out, left .2s ease-out, opacity .2s ease-out, background .2s ease-out;
+}
+
+.gu-unselectable .drag-container[data-drop-zone="0"] .drop-zone {
+  background: red;
+  left: 0;
+}
+
+.gu-unselectable .drag-container[data-drop-zone="1"] .drop-zone {
+  background: blue;
+  left: 33.33%;
+}
+
+.gu-unselectable .drag-container[data-drop-zone="2"] .drop-zone {
+  background: green;
+  left: 66.66%;
+}

@@ -1,0 +1,45 @@
+/*
+ * Spinner
+ * Based on http://codepen.io/Manoz/pen/pydxK
+ *
+
+Exemplary usage:
+
+<span class="spinner">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</span>
+
+*/
+
+.spinner {
+  .line {
+    display: inline-block;
+    width: 15px;
+    height: 2px;
+    border-radius: 5px;
+    background-color: $color-primary;
+  }
+  .line:nth-last-child(1) {
+    animation: spinner 1.5s 1s infinite;
+  }
+  .line:nth-last-child(2) {
+    animation: spinner 1.5s .5s infinite;
+  }
+  .line:nth-last-child(3) {
+    animation: spinner 1.5s 0s infinite;
+  }
+}
+
+@keyframes spinner {
+  0 {
+    width: 15px;
+  }
+  50% {
+    width: 35px;
+  }
+  100% {
+    width: 15px;
+  }
+}

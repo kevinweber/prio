@@ -36,7 +36,7 @@
 
 .custom-menu-brand {
   display: block;
-  font-family: poiret-one, Helvetica, Arial, sans-serif;
+  @include brandFont;
   position: relative;
   font-weight: bold;
   letter-spacing: 2px;
