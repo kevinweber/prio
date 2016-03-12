@@ -153,6 +153,24 @@
       $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, typeId, taskId);
     }
 
+    $scope.updateActiveType = function updateActiveType(newTypeNumber) {
+      var typeData = {};
+
+      // Switch types -- not for production
+      if (newTypeNumber === 1) {
+        $scope.localData.activeType = 2;
+      } else {
+        $scope.localData.activeType = 1;
+      }
+      typeData.activeType = $scope.localData.activeType;
+      
+
+      // Use this for production instead (if feature is ready):
+      //typeData.activeType = newTypeNumber;
+
+      $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+    };
+
 
 
     function isDragging() {
