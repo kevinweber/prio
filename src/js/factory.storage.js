@@ -1,4 +1,4 @@
-/*global angular*/
+/*global angular, queryString*/
 
 /**
  * $localstorage: Service for local storage based on
@@ -35,7 +35,7 @@
             }
           }
         }
-        
+
         // Update local data to update displayed tasks
         $rootScope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME);
       };
@@ -44,6 +44,14 @@
     }])
     .factory('$localstorage', ['$window', function ($window) {
       var $localstorage = this;
+
+      (function handleUrlParameters() {
+        var parsedUrl = queryString.parse(location.search);
+        if (parsedUrl.clearStorage) {
+          $window.localStorage.clear();
+          console.info("Cleared local storage.");
+        }
+      }());
 
       //      $localstorage.set = function (storageName, value) {
       //        $window.localStorage[storageName] = value;
