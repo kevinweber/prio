@@ -88,6 +88,30 @@
       return overdueList.firstElementChild;
     }
 
+    function updateRanks(target, typeId) {
+      var targetChildren = target.children,
+        typeData,
+        taskId,
+        i,
+        l;
+
+      typeData = {};
+      typeData.types = {};
+      typeData.types[typeId] = {};
+
+      // Set rank for each child element
+      for (i = 0, l = targetChildren.length; i < l; i += 1) {
+        taskId = targetChildren[i].attributes[CONSTANTS.ATTR_TASK_ID].value;
+
+        typeData.types[typeId][taskId] = {
+          rank: i + 1
+        };
+      }
+
+      // Merge updated data into storage
+      $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+    }
+
     /* Local data is stored in the following format:
      * activeType + types > typeId > taskId > taskRank + taskSection
      * For example:
@@ -128,14 +152,11 @@
       typeId = $help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
       typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
 
-      taskRank = 3; //parseInt(target.attributes[CONSTANTS.ATTR_DATA_RANK]);
-      // Next step:
-      // Get all siblings and update their rank number, then return the rank for this specific task
+      updateRanks(target, typeId);
 
       taskSection = parseInt(target.attributes[CONSTANTS.ATTR_DATA_SECTION].value, 10);
 
       task[taskId] = {
-        rank: taskRank,
         section: taskSection
       };
 
@@ -163,7 +184,7 @@
         $scope.localData.activeType = 1;
       }
       typeData.activeType = $scope.localData.activeType;
-      
+
 
       // Use this for production instead (if feature is ready):
       //typeData.activeType = newTypeNumber;
