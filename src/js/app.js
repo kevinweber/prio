@@ -88,7 +88,10 @@
       return overdueList.firstElementChild;
     }
 
-    function updateRanks(target, typeId) {
+    
+    
+    
+    function updateSectionRanking(target, typeId) {
       var targetChildren = target.children,
         typeData,
         taskId,
@@ -109,6 +112,24 @@
       }
 
       // Merge updated data into storage
+      $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+    }
+
+    function updateTaskSection(target, taskId, typeId) {
+      var task = {},
+        typeData,
+        taskSection;
+
+      typeData = {};
+      typeData.types = {};
+
+      taskSection = parseInt(target.attributes[CONSTANTS.ATTR_DATA_SECTION].value, 10);
+
+      task[taskId] = {
+        section: taskSection
+      };
+      typeData.types[typeId] = task;
+
       $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
     }
 
@@ -143,26 +164,13 @@
      */
 
     function storeTaskIdLocally(taskId, target) {
-      var typeData = {},
-        typeId,
-        task = {},
-        taskRank,
-        taskSection;
+      var typeId;
 
       typeId = $help.findAncestorByClass(target, CONSTANTS.CLASS_TYPE);
       typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
 
-      updateRanks(target, typeId);
-
-      taskSection = parseInt(target.attributes[CONSTANTS.ATTR_DATA_SECTION].value, 10);
-
-      task[taskId] = {
-        section: taskSection
-      };
-
-      typeData.types = {};
-      typeData.types[typeId] = task;
-      $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+      updateSectionRanking(target, typeId);
+      updateTaskSection(target, taskId, typeId);
     }
 
     function removeTaskIdLocally(taskId, source) {
