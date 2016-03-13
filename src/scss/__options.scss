@@ -6,6 +6,7 @@ $color-black: #2c2c29;
 $color-white: #fff;
 // Orange
 $color-primary: #FF6600;
+$color-primary-medium: rgba($color-primary, .5);
 $color-primary-light: #FFF0E6;
 //$color-primary-dark: #FF6600;
 // Purple
@@ -13,6 +14,7 @@ $color-primary-light: #FFF0E6;
 //$color-primary-dark: #711364;
 $color-secondary: #ffe78d;
 $color-secondary-dark: #ffd740;
+$color-grey: #999;
 $color-link: $color-primary;
 
 @mixin brandFont {

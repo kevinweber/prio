@@ -38,3 +38,10 @@
   background: green;
   left: 66.66%;
 }
+
+.gu-unselectable .no-drop-container {
+  color: $color-grey;
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  opacity: 0.5;
+}

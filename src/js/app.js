@@ -197,10 +197,12 @@
     function removeTaskIdLocally(taskId, source) {
       var typeId;
 
-      typeId = $help.findAncestorByClass(source[0], CONSTANTS.CLASS_TYPE);
-      typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
+      if (source !== undefined) {
+        typeId = $help.findAncestorByClass(source[0], CONSTANTS.CLASS_TYPE);
+        typeId = typeId && parseInt(typeId.attributes[CONSTANTS.ATTR_DATA_TYPE].value, 10);
+      }
 
-      $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, typeId, taskId);
+      $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, taskId, typeId);
     }
 
     $scope.updateActiveType = function updateActiveType(newTypeNumber) {
@@ -255,7 +257,7 @@
       }, scrollSpeed / 4);
     }());
 
-    
+
     // Hopefully not needed ...    
     //    /*
     //     * ATTENTION/fixme: This part is pretty hacky because ng-if doesn't fulfill this app's need fully.
@@ -275,10 +277,30 @@
     //    }
 
 
+    $scope.checkTask = function (taskId) {
+      var tasks,
+        checkbox,
+        l;
+
+
+      tasks = angular.element(document.querySelectorAll("[" + CONSTANTS.ATTR_TASK_ID + "='" + taskId + "']"));
+
+      console.log(tasks);
+
+      for (l = tasks.length - 1; l >= 0; l -= 1) {
+        $help.addClass(tasks[l], "task-checked");
+      }
+
+      // Remove element from DOM (using JS transitioned event)
+
+      // Store "check" into database
+
+    };
 
     dragulaService.options($scope, 'draggable-tasks', {
       revertOnSpill: true,
-      accepts: isDropAllowed
+      accepts: isDropAllowed,
+      ignoreInputTextSelection: false
     });
 
     $scope.$on('draggable-tasks.drag', function (el, source) {
@@ -288,6 +310,7 @@
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
         CONSTANTS.ATTR_DATA_TARGET + "]");
+
       var i = 0,
         l = tempElementsArray.length - 1,
         indicator = 0;

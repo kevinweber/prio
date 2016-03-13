@@ -59,7 +59,6 @@
       <p>Status: <span ng-bind='status.message'></span></p>
     </div>
 
-
     <div class="login__cell" ng-if="!isLoggedIn">
       <div class="login__cell__welcome">
         <p class="intro">Let's be honest: Having no time is not an excuse. It's the matter of priorities.</p>
@@ -89,32 +88,50 @@
 
       <div class="pure-g parent drag-container prio-type prio-type-1" ng-if="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
         <ol class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="0">
-          <li class="task" ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}"></li>
+          <li class="task" ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}">
+            <span class="checkbox" ng-click="checkTask(task.key)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[task.key].title}}</textarea>
+          </li>
         </ol>
       </div>
 
       <div class="pure-g parent drag-container prio-type prio-type-2" ng-if="localData.activeType === 2" data-list-type="2" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
         <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="1">
-          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1"></li>
+          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 1">
+            <span class="checkbox" ng-click="checkTask(task.key)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[task.key].title}}</textarea>
+          </li>
         </ul>
         <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="2">
-          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 2"></li>
+          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 2">
+            <span class="checkbox" ng-click="checkTask(task.key)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[task.key].title}}</textarea>
+          </li>
         </ul>
         <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="3">
-          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 3"></li>
+          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 3">
+            <span class="checkbox" ng-click="checkTask(task.key)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[task.key].title}}</textarea>
+          </li>
         </ul>
         <ul class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="4">
-          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" ng-bind="tasks.tasksById[task.key].title" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 4"></li>
+          <li class="task" ng-repeat="task in localData.types[2] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}" ng-if="task.section === 4">
+            <span class="checkbox" ng-click="checkTask(task.key)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[task.key].title}}</textarea>
+          </li>
         </ul>
       </div>
 
 
-      <div class="pure-g parent drag-container" ng-show="tasks.taskIdsByDate.overdue.length && showOverdue">
+      <div class="pure-g parent drag-container no-drop-container" ng-show="tasks.taskIdsByDate.overdue.length && showOverdue">
         <div class="pure-u-1">
           <h2>Overdue</h2>
         </div>
         <ul id="tasks-overdue" class="pure-u-1 task-list tasks-overdue no-drop" dragula="'draggable-tasks'" data-list-date="{{date.overdue | date: 'yyyy-MM-dd'}}">
-          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></li>
+          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.overdue track by $index" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]">
+            <span class="checkbox" ng-click="checkTask(taskId)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[taskId].title}}</textarea>
+          </li>
         </ul>
       </div>
       <div class="pure-g parent drag-container" data-drop-zone="">
@@ -123,7 +140,10 @@
         </div>
         <ul class="pure-u-1 task-list tasks-today" dragula="'draggable-tasks'" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
           <div class="hidden drop-zone">Today</div>
-          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.today track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></li>
+          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.today track by $index" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]">
+            <span class="checkbox" ng-click="checkTask(taskId)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[taskId].title}}</textarea>
+          </li>
         </ul>
       </div>
       <div class="pure-g parent drag-container" data-drop-zone="">
@@ -132,7 +152,10 @@
         </div>
         <ul class="pure-u-1 task-list tasks-tomorrow" dragula="'draggable-tasks'" data-list-date="{{date.tomorrow | date: 'yyyy-MM-dd'}}">
           <div class="hidden drop-zone">Tomorrow</div>
-          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.tomorrow track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></li>
+          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.tomorrow track by $index" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]">
+            <span class="checkbox" ng-click="checkTask(taskId)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[taskId].title}}</textarea>
+          </li>
         </ul>
       </div>
       <div class="pure-g parent drag-container" data-drop-zone="">
@@ -141,7 +164,10 @@
         </div>
         <ul class="pure-u-1 task-list tasks-week" dragula="'draggable-tasks'" data-list-date="{{date.week | date: 'yyyy-MM-dd'}}">
           <div class="hidden drop-zone">Week</div>
-          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.week track by $index" ng-bind="tasks.tasksById[taskId].title" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]"></li>
+          <li class="task" ng-repeat="taskId in tasks.taskIdsByDate.week track by $index" dragula-scope='$parent' data-task-id="{{taskId}}" ng-if="!localData.types[localData.activeType][taskId]">
+            <span class="checkbox" ng-click="checkTask(taskId)"></span>
+            <textarea class="text-input" maxlength="255" required disabled>{{tasks.tasksById[taskId].title}}</textarea>
+          </li>
         </ul>
       </div>
     </div>

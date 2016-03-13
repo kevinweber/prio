@@ -109,7 +109,7 @@
       //        $localstorage.setObject(storageName, merged);
       //      };
 
-      $localstorage.removeFromObject = function (storageName, typeId, taskId) {
+      $localstorage.removeFromObject = function (storageName, taskId, typeId) {
         function replacer(property, value) {
           if (parseInt(property, 10) === parseInt(typeId, 10) && value[taskId]) {
             delete value[taskId];
