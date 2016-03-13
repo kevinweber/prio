@@ -25,6 +25,27 @@
     document.getElementById('toggle').classList.toggle('x');
   });
 
+  //http://stackoverflow.com/questions/20325480/angularjs-whats-the-best-practice-to-add-ngif-to-a-directive-programmatically
+  //  app.directive('taskIf', function (ngIfDirective, $rootScope) {
+  //    var ngIf = ngIfDirective[0];
+  //
+  //    return {
+  //      transclude: ngIf.transclude,
+  //      priority: ngIf.priority,
+  //      terminal: ngIf.terminal,
+  //      restrict: ngIf.restrict,
+  //      link: function ($scope, $element, $attr) {
+  //        var value = $attr['taskIf'];
+  //        var yourCustomValue = $scope.$eval(value);
+  //
+  //        $attr.ngIf = function () {
+  //          return yourCustomValue;
+  //        };
+  //        ngIf.link.apply(ngIf, arguments);
+  //      }
+  //    };
+  //  });
+
   app.controller('AppCtrl', ['$window', '$document', '$rootScope', '$scope', '$interval', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($window, $document, $rootScope, $scope, $interval, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
     var tempElement,
       tempElementsArray,
@@ -88,9 +109,9 @@
       return overdueList.firstElementChild;
     }
 
-    
-    
-    
+
+
+
     function updateSectionRanking(target, typeId) {
       var targetChildren = target.children,
         typeData,
@@ -187,17 +208,19 @@
 
       // Switch types -- not for production
       if (newTypeNumber === 1) {
-        $scope.localData.activeType = 2;
+        newTypeNumber = 2;
       } else {
-        $scope.localData.activeType = 1;
+        newTypeNumber = 1;
       }
-      typeData.activeType = $scope.localData.activeType;
+      typeData.activeType = newTypeNumber;
 
 
       // Use this for production instead (if feature is ready):
       //typeData.activeType = newTypeNumber;
 
       $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
+
+      $scope.localData.activeType = newTypeNumber;
     };
 
 
@@ -231,6 +254,25 @@
         }
       }, scrollSpeed / 4);
     }());
+
+    
+    // Hopefully not needed ...    
+    //    /*
+    //     * ATTENTION/fixme: This part is pretty hacky because ng-if doesn't fulfill this app's need fully.
+    //     * It relies on the current circumstance that we only want to see the task that comes first in DOM.
+    //     
+    //     // TODO: Be more specific while querying
+    //     */
+    //    function updateVisibleTasks(taskId) {
+    //      var elementsById = angular.element(document.querySelectorAll("[" + CONSTANTS.ATTR_TASK_ID + "='" + taskId + "']"));
+    //      console.log(elementsById, elementsById.length);
+    //
+    //      // Add "hidden" class to every element except for the first one
+    //      $help.removeClass(elementsById[0], "hidden");
+    //      for (var i = 1, l = elementsById.length; i < l; i += 1) {
+    //        $help.addClass(elementsById[i], "hidden");
+    //      }
+    //    }
 
 
 
@@ -292,6 +334,8 @@
         // Store data locally
         if (target.attributes[CONSTANTS.ATTR_DATA_SECTION]) {
           storeTaskIdLocally(taskId, target);
+          // Hide source element to avoid duplicates when localStorage is updated
+          $help.addClass(element[0], "hidden");
         } else {
           removeTaskIdLocally(taskId, source);
         }
