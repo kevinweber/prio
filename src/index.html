@@ -28,12 +28,14 @@
 
 
 <body ng-class="{'login': !isLoggedIn, 'loggedin': isLoggedIn, 'loggedin-loading': isLoggedIn && !isLoaded, 'loggedin-loaded': isLoggedIn && isLoaded}" ng-app='prio' ng-controller='AppCtrl'>
-  <!--[if lt IE 10]>
-<p>Your browser is <em>ancient</em>! Using an outdated browser makes your computer unsafe, and this site doesn't support outdated browsers. <a href="//browsehappy.com/">Upgrade to a different 
-browser</a>.</p>
-<![endif]-->
-
   <header>
+
+    <!--[if lt IE 10]>
+    <div class="outdated-browser">
+      <p>Your browser is ancient! Using an outdated browser makes your computer unsafe, and we don't support outdated browsers. <a href="//browsehappy.com/" target="_blank">Upgrade to a different browser</a>.</p>
+    </div>
+    <![endif]-->
+
     <nav class="custom-menu-wrapper">
       <div class="pure-menu custom-menu custom-menu-top">
         <span class="pure-menu-heading custom-menu-brand">prio.today</span>
