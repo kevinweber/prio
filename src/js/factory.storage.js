@@ -42,8 +42,10 @@
 
       return $localstorageWunderlist;
     }])
-    .factory('$localstorage', ['$window', function ($window) {
-      var $localstorage = this;
+    .factory('$localstorage', ['$rootScope', '$window', '$timeout', 'CONSTANTS', function ($rootScope, $window, $timeout, CONSTANTS) {
+      var $localstorage = this,
+        tempMergeObject,
+        tempMergeTimout;
 
       (function handleUrlParameters() {
         var parsedUrl = queryString.parse(location.search);
@@ -69,14 +71,43 @@
         return JSON.parse($window.localStorage[storageName] || '{}');
       };
 
-      // https://docs.angularjs.org/api/ng/function/angular.merge
+      /*
+       * Collect object and merge them into local storage: 
+       * We combine multiple mergeObject() calls into one and just send one
+       * "request" to store the changes.
+       *
+       * NOTE: This is not working in every case. We have to think of a call of
+       * "getObject" and other functions that might change the local storage while
+       * our timeout. But as long as the timeout is very short, we shouldn't run
+       * into problems.
+       */
       $localstorage.mergeObject = function (storageName, src, dest) {
-        dest = dest || $localstorage.getObject(storageName);
+        dest = dest || tempMergeObject || $localstorage.getObject(storageName);
 
-        var merged = angular.merge({}, dest, src);
-        $localstorage.setObject(storageName, merged);
-        //        console.log(merged);
+        tempMergeObject = angular.merge({}, dest, src);
+
+        // Cancel running timeout before we start a new one
+        if (tempMergeTimout) {
+          $timeout.cancel(tempMergeTimout);
+        }
+
+        tempMergeTimout = $timeout(function () {
+          $localstorage.setObject(storageName, tempMergeObject);
+          
+          // Update local data to update displayed tasks
+          $rootScope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME);
+
+          tempMergeObject = undefined;
+        }, 20);
       };
+
+      // Easiest way to do the merge (just for reference):
+      //      $localstorage.mergeObject = function (storageName, src, dest) {
+      //        dest = dest || $localstorage.getObject(storageName);
+      //
+      //        var merged = angular.merge({}, dest, src);
+      //        $localstorage.setObject(storageName, merged);
+      //      };
 
       $localstorage.removeFromObject = function (storageName, typeId, taskId) {
         function replacer(property, value) {
