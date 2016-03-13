@@ -7,7 +7,8 @@
   .task-list {
     min-height: 100px;
   }
-  .prio-type-2 > ul {
+  .prio-type > ul,
+  .prio-type > ol {
     min-height: 100px;
   }
   .task {
