@@ -1,6 +1,8 @@
 .drag-container .drop-zone {
+  // TODO: We're not using drop zones yet. Exemplary bug: When you drop a task on a zone, the page keeps scolling
+  display: none;
+  //  display: block;
   bottom: 0;
-  display: block;
   height: 7vm;
   height: 7vmin;
   left: 50%;
