@@ -85,7 +85,8 @@
   .drag-source .task {
     transition: inherit;
   }
-  .drag-source:not(.sortable) .task:not(.gu-transit) {
+  .drag-source:not(.sortable) > ul:not(.sortable) .task:not(.gu-transit),
+  .drag-source:not(.sortable) > ol:not(.sortable) .task:not(.gu-transit) {
     opacity: 0.5;
   }
 }
