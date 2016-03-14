@@ -70,7 +70,7 @@
     $scope.isLoggedIn = true;
     $rootScope.isLoaded = false;
     $rootScope.changesCount = 0;
-    $scope.showUndo = false;
+    $scope.isUndoAllowed = false;
     listService.loadData();
 
     (function setupScope() {
@@ -282,15 +282,25 @@
     //      }
     //    }
 
+    $document[0].body.onkeydown = function (e) {
+      if (e.metaKey && e.keyCode === 90) { // CMD/Metakey + "Z"
+        $scope.undo();
+      }
+    };
+
     $scope.undo = function () {
       var taskId,
         lastState;
+
+      if (!$scope.isUndoAllowed) {
+        return;
+      }
 
       lastState = $localstorageStack.getLastState();
 
       if (lastState.type === "completed") {
         $scope.completeTask(lastState.taskId, !lastState.state);
-        $scope.showUndo = false;
+        $scope.isUndoAllowed = false;
       }
     };
 
@@ -309,19 +319,19 @@
       if (state === undefined) {
         state = true;
       }
-      
+
       tasks = angular.element(document.querySelectorAll("[" + CONSTANTS.ATTR_TASK_ID + "='" + taskId + "']"));
 
       for (l = tasks.length - 1; l >= 0; l -= 1) {
         if (state) {
           // Add a class that hides the element
           angular.element(tasks[l]).addClass(CONSTANTS.CLASS_TASK_CHECKED);
-          $scope.showUndo = true;
+          $scope.isUndoAllowed = true;
         } else {
           angular.element(tasks[l]).removeClass(CONSTANTS.CLASS_TASK_CHECKED);
         }
       }
-      
+
       // Send completed status via listService to Wunderlist
       data = {
         completed: state
