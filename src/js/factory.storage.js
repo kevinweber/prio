@@ -80,8 +80,8 @@
         $localstorage.setObject(storageName, tempStorage);
       }
 
-      $localstorageStack.clearStack = function () {
-        tempStorage = {}
+      $localstorageStack.clear = function () {
+        tempStorage = {};
         $localstorage.setObject(storageName, tempStorage);
       };
 
@@ -99,8 +99,16 @@
         };
         tempStorage.length = tempStorage.length + 1;
 
+        $rootScope.changesCount = tempStorage.length;
         $localstorage.setObject(storageName, tempStorage);
-        console.log("current storage: ", $localstorage.getObject(storageName));
+      };
+
+      $localstorageStack.getLastState = function () {
+        if (tempStorage === undefined || $help.isEmpty(tempStorage.stack)) {
+          return;
+        }
+
+        return tempStorage.stack[tempStorage.length - 1];
       };
 
       return $localstorageStack;

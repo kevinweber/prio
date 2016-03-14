@@ -69,6 +69,8 @@
 
     $scope.isLoggedIn = true;
     $rootScope.isLoaded = false;
+    $rootScope.changesCount = 0;
+    $scope.showUndo = false;
     listService.loadData();
 
     (function setupScope() {
@@ -87,9 +89,9 @@
           };
           $localstorage.setObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
         }
-        
+
         // We don't want the stack from last visit to be available, so:
-        $localstorageStack.clearStack();
+        $localstorageStack.clear();
       }());
     }());
 
@@ -280,30 +282,52 @@
     //      }
     //    }
 
+    $scope.undo = function () {
+      var taskId,
+        lastState;
 
-    $scope.completeTask = function (taskId) {
+      lastState = $localstorageStack.getLastState();
+
+      if (lastState.type === "completed") {
+        $scope.completeTask(lastState.taskId, !lastState.state);
+        $scope.showUndo = false;
+      }
+    };
+
+    /*
+     * $scope.completeTask
+     *
+     * @param taskId {int}
+     * @param state {bool} [optional] Pass false to undo completion
+     */
+    $scope.completeTask = function (taskId, state) {
       var data,
         tasks,
         checkbox,
         l;
 
+      if (state === undefined) {
+        state = true;
+      }
+      
       tasks = angular.element(document.querySelectorAll("[" + CONSTANTS.ATTR_TASK_ID + "='" + taskId + "']"));
 
       for (l = tasks.length - 1; l >= 0; l -= 1) {
-        angular.element(tasks[l]).addClass(CONSTANTS.CLASS_TASK_CHECKED);
-
-        // Remove element from DOM after timeout (to make sure that animations are visible)
-        //        tasks[l].remove();
-        // TODO: When we implement an "Undo" feature, don't remove element from DOM –
-        // just add/remove class to show/hide it
+        if (state) {
+          // Add a class that hides the element
+          angular.element(tasks[l]).addClass(CONSTANTS.CLASS_TASK_CHECKED);
+          $scope.showUndo = true;
+        } else {
+          angular.element(tasks[l]).removeClass(CONSTANTS.CLASS_TASK_CHECKED);
+        }
       }
-
+      
       // Send completed status via listService to Wunderlist
       data = {
-        completed: true
+        completed: state
       };
-//      listService.updateTask(taskId, data);
-      $localstorageStack.addState("completed", false, taskId);
+      listService.updateTask(taskId, data);
+      $localstorageStack.addState("completed", state, taskId);
     };
 
     dragulaService.options($scope, 'draggable-tasks', {
