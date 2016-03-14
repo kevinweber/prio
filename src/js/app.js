@@ -4,6 +4,7 @@
 // TODO: UX: When user drops task on drop zone, give some kind of feedback that he was successful
 // TODO: "Undo" functionality
 // TODO: Cancel drag'n'drop when ESC is pressed (https://github.com/bevacqua/dragula#drakecancelrevert)
+// TODO: Cross-browser functionality -- replace $help functions with Angular's built in jqLite if possible
 
 (function () {
   'use strict';
@@ -278,23 +279,27 @@
 
 
     $scope.checkTask = function (taskId) {
-      var tasks,
+      var data,
+        tasks,
         checkbox,
         l;
 
-
       tasks = angular.element(document.querySelectorAll("[" + CONSTANTS.ATTR_TASK_ID + "='" + taskId + "']"));
 
-      console.log(tasks);
-
       for (l = tasks.length - 1; l >= 0; l -= 1) {
-        $help.addClass(tasks[l], "task-checked");
+        angular.element(tasks[l]).addClass(CONSTANTS.CLASS_TASK_CHECKED);
+
+        // Remove element from DOM after timeout (to make sure that animations are visible)
+        //        tasks[l].remove();
+        // TODO: When we implement an "Undo" feature, don't remove element from DOM –
+        // just add/remove class to show/hide it
       }
 
-      // Remove element from DOM (using JS transitioned event)
-
-      // Store "check" into database
-
+      // Send completed status via listService to Wunderlist
+      data = {
+        completed: true
+      };
+      listService.updateTask(taskId, data);
     };
 
     dragulaService.options($scope, 'draggable-tasks', {
@@ -306,7 +311,7 @@
     $scope.$on('draggable-tasks.drag', function (el, source) {
       // Add an indicator to each container which can be used to style relevant drop zones
       tempElement = $help.findAncestorByClass(source[0], CONSTANTS.CLASS_DRAG_CONTAINER);
-      $help.addClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      angular.element(tempElement).addClass(CONSTANTS.CLASS_DRAG_SOURCE);
 
       tempElementsArray = tempElement.parentElement.querySelectorAll("[" +
         CONSTANTS.ATTR_DATA_TARGET + "]");
@@ -358,7 +363,7 @@
         if (target.attributes[CONSTANTS.ATTR_DATA_SECTION]) {
           storeTaskIdLocally(taskId, target);
           // Hide source element to avoid duplicates when localStorage is updated
-          $help.addClass(element[0], "hidden");
+          angular.element(element[0]).addClass("hidden");
         } else {
           removeTaskIdLocally(taskId, source);
         }
@@ -370,7 +375,7 @@
       var i = 0,
         l = tempElementsArray.length - 1;
 
-      $help.removeClass(tempElement, CONSTANTS.CLASS_DRAG_SOURCE);
+      angular.element(tempElement).removeClass(CONSTANTS.CLASS_DRAG_SOURCE);
       while (i <= l) {
         tempElementsArray[i].setAttribute(CONSTANTS.ATTR_DATA_TARGET, "");
         i += 1;

@@ -39,10 +39,6 @@
   .custom-menu-wrapper {
     margin-bottom: 0;
   }
-  .custom-menu-bottom {
-    @include rgba(background, $color-white, .4);
-    border-top: 0;
-  }
   @media screen and (min-width: 25em) {
     &__cell__welcome {
       padding: 4vh 12vw;

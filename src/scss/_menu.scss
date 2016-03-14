@@ -123,10 +123,12 @@
 }
 
 .custom-menu-bottom {
+  @include rgba(background, $color-white, .4);
+  border-top: 0;
   width: 100%;
-  border-top: 1px solid #eee;
   z-index: 1;
-  background: linear-gradient(#f3f3f3 0%, #f6f6f6 5%, #f6f6f6 95%, #f3f3f3 100%);
+  // border-top: 1px solid #eee;
+  // background: linear-gradient(#f3f3f3 0%, #f6f6f6 5%, #f6f6f6 95%, #f3f3f3 100%);
 }
 
 .custom-menu-bottom .pure-menu-link {

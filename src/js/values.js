@@ -19,6 +19,7 @@
       CLASS_SORTABLE: "sortable",
       CLASS_OVERDUE: "tasks-overdue",
       CLASS_TYPE: "prio-type",
+      CLASS_TASK_CHECKED: "task-checked",
 
       // HTML ATTRIBUTES
       ATTR_DATA_TARGET: "data-drop-zone",

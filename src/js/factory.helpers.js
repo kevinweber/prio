@@ -16,6 +16,8 @@
     };
 
     // Note: No browser support for IE < 10
+    // NOTE: Use angular's built in jqLite instead!
+    // E.g. angular.element(tempElement).addClass(CONSTANTS.CLASS_DRAG_SOURCE);
     helpers.addClass = function (element, className) {
       if (element && !helpers.hasClass(element, className)) {
         element.classList.add(className);
@@ -23,6 +25,8 @@
     };
 
     // Note: No browser support for IE < 10
+    // NOTE: Use angular's built in jqLite instead!
+    // E.g. angular.element(tempElement).addClass(CONSTANTS.CLASS_DRAG_SOURCE);
     helpers.removeClass = function (element, className) {
       if (element && helpers.hasClass(element, className)) {
         element.classList.remove(className);

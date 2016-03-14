@@ -86,7 +86,7 @@
       <div class="switch" ng-click="updateActiveType(localData.activeType);">Switch</div>
 
 
-      <div class="pure-g parent drag-container prio-type prio-type-1" ng-if="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
+      <div class="pure-g parent drag-container prio-type prio-type-ranking" ng-if="localData.activeType === 1" data-list-type="1" data-list-date="{{date.today | date: 'yyyy-MM-dd'}}">
         <ol class="pure-u-1 pure-u-sm-1-2 sortable" dragula="'draggable-tasks'" data-list-section="0">
           <li class="task" ng-repeat="task in localData.types[1] | orderObjectBy: 'rank'" dragula-scope='$parent' data-task-id="{{task.key}}">
             <span class="checkbox" ng-click="checkTask(task.key)"></span>
