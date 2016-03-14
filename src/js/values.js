@@ -8,6 +8,7 @@
     .value('CONSTANTS', {
       // Storage related
       STORAGE_LOCAL_NAME: "prio",
+      STORAGE_LOCAL_CHANGES_NAME: "prio-changes",
 
       // HTML IDs
       ID_TASKS_OVERDUE: "tasks-overdue",

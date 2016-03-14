@@ -12,7 +12,7 @@
   'use strict';
 
   angular
-    .module('prio.factory.storage', ['prio.values'])
+    .module('prio.factory.storage', ['prio.values', 'prio.factory.helpers'])
     .factory('$localstorageWunderlist', ['$rootScope', '$localstorage', 'CONSTANTS', function ($rootScope, $localstorage, CONSTANTS) {
       var $localstorageWunderlist = this;
 
@@ -37,10 +37,73 @@
         }
 
         // Update local data to update displayed tasks
-        $rootScope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME);
+        $rootScope.localData = $localstorage.getObject(storageName);
       };
 
       return $localstorageWunderlist;
+    }])
+    /*
+     * $localstorageStack handles changes so that they can be undone.
+     * Exemplary storage structure:
+
+        var data = {
+          length: 2,
+          stack {
+            0: {
+              type: "completed",
+              state: false,
+              taskId: XXXXXXXXXXX
+            },
+            1: {
+              type: "task-title",
+              state: "This is the old task text.",
+              taskId: XXXXXXXXXXX,
+              ...
+            },
+            ...
+          }
+        };
+
+     * Changes are always added at the end.
+     */
+    .factory('$localstorageStack', ['$rootScope', '$localstorage', 'CONSTANTS', '$help', function ($rootScope, $localstorage, CONSTANTS, $help) {
+      var $localstorageStack = this,
+        storageName = CONSTANTS.STORAGE_LOCAL_CHANGES_NAME,
+        tempStorage;
+
+      function setupDefaultStack() {
+        tempStorage = {
+          length: 0,
+          stack: {}
+        };
+
+        $localstorage.setObject(storageName, tempStorage);
+      }
+
+      $localstorageStack.clearStack = function () {
+        tempStorage = {}
+        $localstorage.setObject(storageName, tempStorage);
+      };
+
+      $localstorageStack.addState = function (type, state, taskId) {
+        tempStorage = $localstorage.getObject(storageName);
+
+        if ($help.isEmpty(tempStorage)) {
+          setupDefaultStack();
+        }
+
+        tempStorage.stack[tempStorage.length] = {
+          type: type,
+          state: state,
+          taskId: parseInt(taskId, 10) || 0
+        };
+        tempStorage.length = tempStorage.length + 1;
+
+        $localstorage.setObject(storageName, tempStorage);
+        console.log("current storage: ", $localstorage.getObject(storageName));
+      };
+
+      return $localstorageStack;
     }])
     .factory('$localstorage', ['$rootScope', '$window', '$timeout', 'CONSTANTS', function ($rootScope, $window, $timeout, CONSTANTS) {
       var $localstorage = this,
@@ -51,7 +114,7 @@
         var parsedUrl = queryString.parse(location.search);
         if (parsedUrl.clearStorage) {
           $window.localStorage.clear();
-          console.info("Cleared local storage.");
+          console.info("Prio: Cleared local storage.");
         }
       }());
 
@@ -79,7 +142,7 @@
        * NOTE: This is not working in every case. We have to think of a call of
        * "getObject" and other functions that might change the local storage while
        * our timeout. But as long as the timeout is very short, we shouldn't run
-       * into problems.
+       * into problems. We also have to think about dealing with multiple storages ...
        */
       $localstorage.mergeObject = function (storageName, src, dest) {
         dest = dest || tempMergeObject || $localstorage.getObject(storageName);
@@ -93,7 +156,7 @@
 
         tempMergeTimout = $timeout(function () {
           $localstorage.setObject(storageName, tempMergeObject);
-          
+
           // Update local data to update displayed tasks
           $rootScope.localData = $localstorage.getObject(CONSTANTS.STORAGE_LOCAL_NAME);
 
@@ -101,13 +164,12 @@
         }, 20);
       };
 
-      // Easiest way to do the merge (just for reference):
-      //      $localstorage.mergeObject = function (storageName, src, dest) {
-      //        dest = dest || $localstorage.getObject(storageName);
-      //
-      //        var merged = angular.merge({}, dest, src);
-      //        $localstorage.setObject(storageName, merged);
-      //      };
+      $localstorage.mergeObjectSimple = function (storageName, src, dest) {
+        dest = dest || $localstorage.getObject(storageName);
+
+        var merged = angular.merge({}, dest, src);
+        $localstorage.setObject(storageName, merged);
+      };
 
       $localstorage.removeFromObject = function (storageName, taskId, typeId) {
         function replacer(property, value) {

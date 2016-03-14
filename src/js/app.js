@@ -47,7 +47,7 @@
   //    };
   //  });
 
-  app.controller('AppCtrl', ['$window', '$document', '$rootScope', '$scope', '$interval', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', function ($window, $document, $rootScope, $scope, $interval, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage) {
+  app.controller('AppCtrl', ['$window', '$document', '$rootScope', '$scope', '$interval', 'dragulaService', 'wunderlistService', 'CONSTANTS', '$help', '$localstorage', '$localstorageStack', function ($window, $document, $rootScope, $scope, $interval, dragulaService, wunderlistService, CONSTANTS, $help, $localstorage, $localstorageStack) {
     var tempElement,
       tempElementsArray,
       listService,
@@ -87,6 +87,9 @@
           };
           $localstorage.setObject(CONSTANTS.STORAGE_LOCAL_NAME, defaultObject);
         }
+        
+        // We don't want the stack from last visit to be available, so:
+        $localstorageStack.clearStack();
       }());
     }());
 
@@ -278,7 +281,7 @@
     //    }
 
 
-    $scope.checkTask = function (taskId) {
+    $scope.completeTask = function (taskId) {
       var data,
         tasks,
         checkbox,
@@ -299,7 +302,8 @@
       data = {
         completed: true
       };
-      listService.updateTask(taskId, data);
+//      listService.updateTask(taskId, data);
+      $localstorageStack.addState("completed", false, taskId);
     };
 
     dragulaService.options($scope, 'draggable-tasks', {
