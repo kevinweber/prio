@@ -1,3 +1,15 @@
+@mixin task-style {
+  background-color: $color-white;
+  box-sizing: content-box;
+  position: relative;
+  box-shadow: 0 1px 1px 0 rgba($color-black, .2);
+  border-radius: 5px;
+  max-height: 30px;
+  padding: 5px 10px;
+  margin: 4px 0 0;
+  box-sizing: content-box;
+}
+
 @mixin text-input {
   background: none;
   border: none;
@@ -5,12 +17,12 @@
   box-shadow: none;
   -moz-box-shadow: none;
   cursor: grab;
-  height: $checkbox-size;
+  height: $checkbox-size * .9;
   line-height: $checkbox-size + 2;
   overflow-x: scroll;
   overflow-y: hidden;
   outline: none;
-  margin-left: $checkbox-size + 10px;
+  margin-left: $checkbox-size + 8px;
   padding-top: 3px;
   resize: none;
   transition: margin-top .4s .8s;
@@ -45,19 +57,12 @@
     min-height: 100px;
   }
   .task {
-    $margin: 4px;
-    $border-style: 1px dashed $color-primary-medium;
+    @include task-style;
     cursor: grab;
-    max-height: 30px;
     opacity: 1;
     overflow: hidden;
     position: relative;
     transition: transform .3s .8s, max-height .4s .8s, padding .4s .8s, margin .4s .8s, opacity 1.1s .3s, font-size .4s .8s;
-    padding: 5px;
-    border-top: $border-style;
-    border-bottom: $border-style;
-    margin: $margin 0 0;
-    box-sizing: content-box;
     .text-input {
       @include text-input;
       z-index: 1;
@@ -65,7 +70,7 @@
     &.gu-transit {
       -webkit-filter: blur(1px);
       filter: blur(1px);
-      opacity: .25;
+      opacity: .5;
       transition: none;
     }
   }
@@ -73,7 +78,7 @@
     cursor: default;
     font-size: .8em;
     max-height: 0;
-    margin: 0 0 -2px;
+    margin: 0;
     opacity: 0;
     padding: 0;
     transform: skew(-22deg, 3deg) translate(14px, -5px);
@@ -87,20 +92,17 @@
   }
   .drag-source:not(.sortable) > ul:not(.sortable) .task:not(.gu-transit),
   .drag-source:not(.sortable) > ol:not(.sortable) .task:not(.gu-transit) {
-    opacity: 0.5;
+    opacity: .8;
   }
 }
 
 // Currently dragged task
 .gu-mirror {
-  box-sizing: content-box;
+  @include task-style;
   cursor: grabbing;
   list-style-type: none;
-  position: relative;
-  padding: 5px;
-  margin: 4px 0 0;
-  max-height: 30px;
   .checkbox {
+    cursor: grabbing;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -108,5 +110,6 @@
   textarea,
   .text-input {
     @include text-input;
+    cursor: grabbing;
   }
 }
