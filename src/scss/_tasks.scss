@@ -43,8 +43,47 @@
 
 .tool {
   z-index: 3;
+  .control-bar,
   .drag-container {
     padding: 0 1em;
+  }
+  .switch-type {
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    margin-right: 10px;
+    opacity: .4;
+    width: 20px;
+    &:hover {
+      opacity: .6;
+    }
+    &.active:hover,
+    &.active {
+      cursor: auto;
+      opacity: 1;
+    }
+  }
+  .undo {
+    background-size: contain;
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    float: right;
+    opacity: 0;
+    pointer-events: none;
+    transform: rotate(-100deg);
+    transition: opacity .3s .3s, transform .6s;
+    width: 20px;
+    &.available {
+      opacity: .4;
+      pointer-events: auto;
+      transform: rotate(0deg);
+      transition: opacity .3s, transform 0s;
+    }
+    &.available:hover {
+      opacity: .6;
+    }
   }
   .task-list {
     min-height: 100px;
@@ -54,7 +93,12 @@
   }
   .prio-type > ul,
   .prio-type > ol {
+    background-color: rgba($color-primary, .1);
     min-height: 100px;
+    padding: 7px 9px 10px;
+  }
+  .prio-type > .title {
+    margin-bottom: 0;
   }
   .task {
     @include task-style;

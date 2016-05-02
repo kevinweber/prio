@@ -1,8 +1,6 @@
 /*global angular, queryString, angularDragula*/
 
 // TODO: Work on security
-// TODO: UX: When user drops task on drop zone, give some kind of feedback that he was successful
-// TODO: "Undo" functionality
 // TODO: Cancel drag'n'drop when ESC is pressed (https://github.com/bevacqua/dragula#drakecancelrevert)
 // TODO: Cross-browser functionality -- replace $help functions with Angular's built in jqLite if possible
 
@@ -211,20 +209,11 @@
       $localstorage.removeFromObject(CONSTANTS.STORAGE_LOCAL_NAME, taskId, typeId);
     }
 
-    $scope.updateActiveType = function updateActiveType(newTypeNumber) {
+    $scope.switchTypeTo = function switchTypeTo(newTypeNumber) {
       var typeData = {};
 
-      // Switch types -- not for production
-      if (newTypeNumber === 1) {
-        newTypeNumber = 2;
-      } else {
-        newTypeNumber = 1;
-      }
-      typeData.activeType = newTypeNumber;
-
-
       // Use this for production instead (if feature is ready):
-      //typeData.activeType = newTypeNumber;
+      typeData.activeType = newTypeNumber;
 
       $localstorage.mergeObject(CONSTANTS.STORAGE_LOCAL_NAME, typeData);
 

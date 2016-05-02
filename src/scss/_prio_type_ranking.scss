@@ -1,0 +1,25 @@
+/*
+ * Priority List
+ */
+
+.prio-type-ranking {
+  .sortable {
+    counter-reset: ranking-counter;
+    > .task:before {
+      color: $color-primary-medium;
+      content: counter(ranking-counter);
+      counter-increment: ranking-counter;
+      font-size: 14px;
+      font-weight: bold;
+      left: 16.5px;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      @include prefixed(transform, translateY(-50%));
+      z-index: 3;
+    }
+  }
+  @media screen and (min-width: 25em) {}
+  @media screen and (min-width: 35.5em) {}
+  @media screen and (min-width: 48em) {}
+}
