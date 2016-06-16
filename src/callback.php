@@ -23,7 +23,9 @@ if ($result === FALSE) {
   $redirect_url .= "?error";
 } else {
   $result = json_decode($result[0], true);  // Decode result to array
-  $redirect_url .= '?access_token=' . $result['access_token'];
+  $cookie_name = 'prio';
+  $cookie_value = $result['access_token'];
+  setcookie($cookie_name, $cookie_value, time() + (86400 * 90), '/'); // 86400 = 1 day
 }
 
 header("Location: " . $redirect_url);

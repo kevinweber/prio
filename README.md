@@ -11,7 +11,7 @@ Prio is a simple tool to sort tasks into a list and into a priority matrix (insp
 
 Prio is very experimental and NOT intended for use in production. It is not tested across browsers and security flaws are definitely possible. Use it on your own risk.
 
-* Login with your Wunderlist account. NOTE: The access token provided by Wunderlist is currently stored/displayed in your URL and, thus, visible to everyone who has access to your device. This tool doesn't follow current security best practices at all.
+* Login with your Wunderlist account. NOTE: The access token provided by Wunderlist is currently stored as cookie and, thus, accessible by everyone who has access to your device. This tool doesn't follow current security best practices at all. Use it on your own risk.
 * Every task can be moved using drag'n'drop.
 * Tasks in the list and matrix are stored in your browser locally. But you can also move tasks from, for example, "Overdue" to "Tomorrow". In this case, the new date will be stored into your Wunderlist account!
 * You can check a task to mark it as done. You can also undo checking the task. This will synchronize with your Wunderlist account.

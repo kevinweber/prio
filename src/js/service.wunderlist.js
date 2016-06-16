@@ -6,6 +6,7 @@
   var app = angular.module('prio.service.wunderlist', ['prio.factory.storage']),
     WunderlistSDK = window.wunderlist.sdk,
     wunderlistApiUrl = 'https://a.wunderlist.com/api/v1/',
+    cookieName = 'prio',
     timeSpan = {
       overdue: "overdue", // before today (overdue)
       today: "today",
@@ -146,14 +147,14 @@
           storeTasksById(task);
         });
       },
-        
+
       updateLocalTasks = function (tasks) {
         $localstorageWunderlist.deleteLocalTasks(tasksById);
       },
 
       loadAllTasks = function () {
         updateStatus("Loading tasks ...");
-        
+
         var listLength = allListIds.length;
 
         // Initiate current time only once
@@ -163,7 +164,7 @@
           WunderlistAPI.http.tasks.forList(id)
             .done(function (tasksData, statusCode) {
               storeTasks(tasksData);
-            
+
               if (key + 1 === listLength) {
                 updateLocalTasks();
                 $rootScope.isLoaded = true;
@@ -256,6 +257,25 @@
         data.revision = data.revision || tasksById[id].revision;
 
         sendPatch(id, data);
+      },
+
+      getCookie = function (cookieName) {
+        var i,
+          c,
+          name = cookieName + "=",
+          ca = document.cookie.split(';');
+
+        for (i = 0; i < ca.length; i += 1) {
+          c = ca[i];
+          while (c.charAt(0) === ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) === 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+
+        return "";
       };
 
     wunderlist.status = status;
@@ -267,13 +287,7 @@
     wunderlist.updateTask = updateTask;
 
     wunderlist.isLoggedIn = function () {
-      // TODO: Security: Check if the randomly generated string equals parsed STATE
-      // https://developer.wunderlist.com/documentation/concepts/authorization
-      var parsedUrl = queryString.parse(location.search);
-      oauthConfig.accessToken = parsedUrl.access_token;
-
-      // TODO: Security: Instead of passing access_token via URL, use SESSIONS
-      // http://stackoverflow.com/a/2447269/3266345
+      oauthConfig.accessToken = getCookie(cookieName);
 
       return oauthConfig.accessToken ? true : false;
     };

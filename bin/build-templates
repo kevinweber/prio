@@ -1,6 +1,6 @@
 # Copy root files
 echo "> Copy root files..."
-cp src/{index.html,callback.php,private.settings.php,settings.php} dist/
+cp src/{index.html,callback.php,logout.php,private.settings.php,settings.php} dist/
 
 # Minify HTML
 echo "> Minify HTML..."
