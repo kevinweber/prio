@@ -20,6 +20,7 @@ Exemplary usage:
     height: 2px;
     border-radius: 5px;
     background-color: $color-primary;
+    margin-right: 14px;
   }
   .line:nth-last-child(1) {
     animation: spinner 1.5s 1s infinite;

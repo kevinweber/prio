@@ -13,6 +13,10 @@ html {
   box-sizing: inherit;
 }
 
+body {
+  @include prefixed(transition, opacity .3s ease-out .2s);
+}
+
 .pure-g [class*=pure-u] {
   font-family: Helvetica, Arial, sans-serif;
 }

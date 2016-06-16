@@ -11,9 +11,9 @@
     oauthConfig = {
       accessToken: '',
       accessCode: '',
-      clientID: '16551d4c73904985c4f0',
+      clientID: '23010814209ec4d01a38',
       // TODO: Security: Display client secret? Only server-side? Not Github! http://stackoverflow.com/questions/6144826/secure-oauth-in-javascript
-      redirectUrl: 'http://localhost/git/prio/src/callback.php',
+      redirectUrl: 'http://kevinw.de/prio/callback.php',
       // TODO: Security: Generate this random string randomly actually
       // and check that string server-side
       random: 'kljdfklshfliaudjfhalsdkjfh43j4dj22223sdf'
@@ -23,6 +23,8 @@
     document.getElementById('tuckedMenu').classList.toggle('custom-menu-tucked');
     document.getElementById('toggle').classList.toggle('x');
   });
+  
+  document.body.style.opacity = '1';
 
   //http://stackoverflow.com/questions/20325480/angularjs-whats-the-best-practice-to-add-ngif-to-a-directive-programmatically
   //  app.directive('taskIf', function (ngIfDirective, $rootScope) {

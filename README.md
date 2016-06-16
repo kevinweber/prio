@@ -25,4 +25,4 @@ Because the development of this tool was just intended for training purposes, it
 * In your terminal, install all dependencies using `$ npm install`.
 * Change the filename of `example__private.settings.php` in `src/` to `private.settings.php` and insert your client secret. You get that secret by creating an app on [developer.wunderlist.com](https://developer.wunderlist.com/). Moreover, that folder also includes a file named `settings.php`. There you have to insert your app's client ID (from Wunderlist) and provide a callback URL.
 * Create production ready code by running `$ npm run build-production`.
-* Open the `dist/` on a web server, for example using MAMP or by running `$ php -S localhost:1337`
+* Open the `dist/` folder on a web server, for example using MAMP or by running `$ php -S localhost:1337`
